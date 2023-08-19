@@ -1,2 +1,5 @@
 main:
-	gcc -g main.c prompt.c
+	gcc -g src/main/main.c src/main/prompt.c
+
+clean:
+	rm *.out
