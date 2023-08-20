@@ -7,12 +7,17 @@
 char userName[USERNAME_BUFFER_SIZE];
 char sysName[SYSNAME_BUFFER_SIZE];
 char homeDirectory[DIRECTORY_BUFFER_SIZE];
+char absolutePath[DIRECTORY_BUFFER_SIZE];
 char currentDirectory[DIRECTORY_BUFFER_SIZE];
 
 int initPrompt() {
     if (getcwd(homeDirectory, DIRECTORY_BUFFER_SIZE) == NULL) {
         // TODO Handle error
+
+        return 1;
     }
+
+    return 0;
 }
 
 void getUsername(char* buffer) {
@@ -32,25 +37,27 @@ void getSysname(char* buffer) {
 }
 
 void setCurrentDirectory() {
-    if (getcwd(currentDirectory, DIRECTORY_BUFFER_SIZE) == NULL) {
+    if (getcwd(absolutePath, DIRECTORY_BUFFER_SIZE) == NULL) {
         // TODO Handle error
     }
 
     int homeDirectoryLength = strlen(homeDirectory);
     bool isHomeDirPrefix = true;
     for (int i = 0; i < homeDirectoryLength; i++) {
-        if (homeDirectory[i] != currentDirectory[i]) {
+        if (homeDirectory[i] != absolutePath[i]) {
             isHomeDirPrefix = false;
             break;
         }
     }
 
     if (isHomeDirPrefix) {
-        int currentDirectoryLength = strlen(currentDirectory);
+        int absolutePathLength = strlen(absolutePath);
         currentDirectory[0] = '~';
-        for (int i = 1; i - 1 + homeDirectoryLength <= currentDirectoryLength; i++) {
-            currentDirectory[i] = currentDirectory[i - 1 + homeDirectoryLength]; 
+        for (int i = 1; i - 1 + homeDirectoryLength <= absolutePathLength; i++) {
+            currentDirectory[i] = absolutePath[i - 1 + homeDirectoryLength]; 
         }    
+    } else {
+        strcpy(currentDirectory, absolutePath);
     }
 }
 

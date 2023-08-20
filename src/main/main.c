@@ -1,6 +1,6 @@
 #include "../header/headers.h"
 
-int initialize() {
+void initialize() {
     initPrompt();
 }
 
