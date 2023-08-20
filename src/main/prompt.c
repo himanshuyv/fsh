@@ -8,6 +8,7 @@ char sysName[SYSNAME_BUFFER_SIZE];
 char homeDirectory[DIRECTORY_BUFFER_SIZE];
 char absolutePath[DIRECTORY_BUFFER_SIZE];
 char currentDirectory[DIRECTORY_BUFFER_SIZE];
+char previousDirectory[DIRECTORY_BUFFER_SIZE];
 
 int initPrompt() {
     if (getcwd(homeDirectory, DIRECTORY_BUFFER_SIZE) == NULL) {
@@ -15,6 +16,8 @@ int initPrompt() {
 
         return 1;
     }
+    
+    strcpy(previousDirectory, homeDirectory);
 
     return 0;
 }

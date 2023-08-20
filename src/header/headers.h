@@ -7,4 +7,6 @@
 #include <unistd.h>
 
 #include "prompt.h"
+#include "warp.h"
+
 #endif
