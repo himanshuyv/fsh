@@ -5,6 +5,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
+
+#define DEBUG
 
 #include "prompt.h"
 #include "warp.h"

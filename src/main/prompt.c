@@ -16,7 +16,7 @@ int initPrompt() {
 
         return 1;
     }
-    
+
     strcpy(previousDirectory, homeDirectory);
 
     return 0;
@@ -55,9 +55,10 @@ void setCurrentDirectory() {
     if (isHomeDirPrefix) {
         int absolutePathLength = strlen(absolutePath);
         currentDirectory[0] = '~';
-        for (int i = 1; i - 1 + homeDirectoryLength <= absolutePathLength; i++) {
-            currentDirectory[i] = absolutePath[i - 1 + homeDirectoryLength]; 
-        }    
+        for (int i = 1; i - 1 + homeDirectoryLength <= absolutePathLength;
+             i++) {
+            currentDirectory[i] = absolutePath[i - 1 + homeDirectoryLength];
+        }
     } else {
         strcpy(currentDirectory, absolutePath);
     }
@@ -67,5 +68,12 @@ void prompt() {
     getUsername(userName);
     getSysname(sysName);
     setCurrentDirectory();
+
+#ifdef DEBUG
+    printf("[PROMPT_DEBUG] absolutePath: %s\n", absolutePath);
+    printf("[PROMPT_DEBUG] currentDirectory: %s\n", currentDirectory);
+    printf("[PROMPT_DEBUG] previousDirectory: %s\n", previousDirectory);
+#endif
+
     printf("<%s@%s:%s>", userName, sysName, currentDirectory);
 }
