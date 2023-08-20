@@ -15,21 +15,22 @@ int tokenize(Command* c, char* commandStr) {
         token = strtok(NULL, TOKEN_DELIMETERS);
     }
 
-    if (argc == 0) {
-        return -1;
-    }
+    if (argc == 0) return -1;
+
     c->argc = argc;
     c->argv = (char**) malloc(sizeof(char*) * argc);
-    printf("%ld ", argc);
     for (int i = 0; i < argc; i++) {
         c->argv[i] = argv[i];
     }
 
+#ifdef DEBUG
+    printf("[TOKENIZE_DEBUG] Token count: %ld, Tokens: ", argc);
     for (int i = 0; i < argc; i++) {
         printf("%s ", c->argv[i]);
     }
-    printf("%d", c->isBackground);
+    printf(", Is background: %d", c->isBackground);
     printf("\n");
+#endif
     return 0;
 }
 
