@@ -1,8 +1,8 @@
 main:
-	gcc src/main/main.c src/main/prompt.c
+	gcc -O2 src/main/*.c
 
 debug:
-	gcc -g -Wall -fsanitize=address,undefined src/main/main.c src/main/prompt.c
+	gcc -g -Wall -fsanitize=address,undefined src/main/*.c
 
 clean:
 	rm *.out
