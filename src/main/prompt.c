@@ -17,7 +17,7 @@ int initPrompt() {
         return 1;
     }
 
-    strcpy(previousDirectory, homeDirectory);
+    strcpy(previousDirectory, "");
 
     return 0;
 }

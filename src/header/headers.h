@@ -1,13 +1,13 @@
 #ifndef HEADERS_H_
 #define HEADERS_H_
 
-#include <stdio.h>
+#include <errno.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 
-#define DEBUG
+// #define DEBUG
 
 #include "prompt.h"
 #include "warp.h"
