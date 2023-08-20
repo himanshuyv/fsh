@@ -50,5 +50,5 @@ int parseInput(Command* buffer, size_t bufferSize, char* input) {
         inputPtr += commandStrLen + 1;
     }
 
-    return 0;
+    return commandCt;
 }
