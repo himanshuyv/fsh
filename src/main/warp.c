@@ -32,6 +32,7 @@ int changeDirectory(char* path) {
     } else if (errno == 0) {
         strcpy(previousDirectory, absolutePath);
         getcwd(absolutePath, DIRECTORY_BUFFER_SIZE);
+        printf("%s\n", absolutePath);
     }
 
     return 0;
