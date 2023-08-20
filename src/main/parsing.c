@@ -40,7 +40,6 @@ int parseInput(Command* buffer, size_t bufferSize, char* input) {
     while (inputPtr < inputLength) {
         size_t commandStrLen = strcspn(input + inputPtr, ";&");
         if (commandStrLen) {
-            char dbg = input[inputPtr + commandStrLen];
             if (input[inputPtr + commandStrLen] == '&') buffer[commandCt].isBackground = true;
             else buffer[commandCt].isBackground = false;
             input[inputPtr + commandStrLen] = '\0';
