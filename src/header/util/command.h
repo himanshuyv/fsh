@@ -10,4 +10,6 @@ typedef struct Command {
     bool isBackground;
 } Command;
 
+void freeCommand(Command* c);
+
 #endif
