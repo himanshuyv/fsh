@@ -1,8 +1,8 @@
 main:
-	gcc -O2 src/main/*.c 
+	gcc -O2 src/main/*.c src/main/util/*.c
 
 debug:
-	gcc -g -Wall -fsanitize=address,undefined src/main/*.c
+	gcc -g -Wall -fsanitize=address,undefined src/main/*.c src/main/util/*.c
 
 clean:
 	rm *.out

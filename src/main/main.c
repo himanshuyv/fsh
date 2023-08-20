@@ -1,8 +1,6 @@
 #include "../header/headers.h"
 
-void initialize() {
-    initPrompt();
-}
+void initialize() { initPrompt(); }
 
 #define MAX_COMMAND_PER_LINE 128
 #define INPUT_BUFFER 4096
@@ -23,5 +21,6 @@ int main() {
         Command buffer[MAX_COMMAND_PER_LINE];
         int commandCt = parseInput(buffer, MAX_COMMAND_PER_LINE, input);
         for (int i = 0; i < commandCt; i++) executeCommand(&buffer[i]);
+        for (int i = 0; i < commandCt; i++) freeCommand(&buffer[i]);
     }
 }
