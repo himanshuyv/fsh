@@ -14,7 +14,7 @@ int changeDirectory(char* path) {
     } else if (pathLength == 1) {
         if (path[0] == '-') {
             if (strlen(previousDirectory) == 0) {
-                printf("[ERROR]: Old PWD not set\n");
+                fprintf(stderr, "[ERROR]: OLD_PWD not set\n");
                 return 3;
             } else {
                 errorCode = chdir(previousDirectory);
@@ -26,7 +26,7 @@ int changeDirectory(char* path) {
 
     if (errorCode == -1) {
         if (errno == 2) {
-            printf("[ERROR]: Directory \'%s\' not found\n", path);
+            fprintf(stderr, "[ERROR]: Directory \'%s\' not found\n", path);
             return NO_SUCH_DIRECTORY;
         }
     } else if (errno == 0) {
@@ -36,4 +36,26 @@ int changeDirectory(char* path) {
     }
 
     return 0;
+}
+
+int warp(Command* command) {
+    if (command->argc == 0) {
+        fprintf(stderr, "[ERROR]: Warp command has length 0\n");
+        return 1;
+    }
+
+    if (command->argc == 1 && strcmp(command->argv[0], "warp") != 0) {
+        fprintf(stderr, "[ERROR]: Warp command does not begin with \'warp\'\n");
+        return 1;
+    }
+
+    int exitCode;
+    if (command->argc == 1) {
+        exitCode = changeDirectory("");
+    } else {
+        exitCode = 0;
+        for (int i = 1; i < command->argc; i++) exitCode |= (changeDirectory(command->argv[i]) > 0);
+    }
+
+    return exitCode > 0;
 }
