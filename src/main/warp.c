@@ -39,14 +39,9 @@ int changeDirectory(char* path) {
 }
 
 int warp(Command* command) {
-    if (command->argc == 0) {
-        fprintf(stderr, "[ERROR]: Warp command has length 0\n");
-        return 1;
-    }
-
     if (command->argc == 1 && strcmp(command->argv[0], "warp") != 0) {
         fprintf(stderr, "[ERROR]: Warp command does not begin with \'warp\'\n");
-        return 1;
+        return EXEC_FAILURE;
     }
 
     int exitCode;
@@ -57,5 +52,6 @@ int warp(Command* command) {
         for (int i = 1; i < command->argc; i++) exitCode |= (changeDirectory(command->argv[i]) > 0);
     }
 
-    return exitCode > 0;
+    if (exitCode > 0) return EXEC_FAILURE;
+    else return EXEC_SUCCESS;
 }

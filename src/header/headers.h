@@ -13,5 +13,6 @@
 #include "prompt.h"
 #include "util/command.h"
 #include "warp.h"
+#include "executing.h"
 #include "parsing.h"
 #endif
