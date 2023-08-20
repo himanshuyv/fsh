@@ -4,16 +4,19 @@ void initialize() {
     initPrompt();
 }
 
+#define MAX_COMMAND_PER_LINE 128
+#define INPUT_BUFFER 4096
+
 int main() {
     initialize();
     while (1) {
         prompt();
-        char input[4096];
-        fgets(input, 4096, stdin);
+        char input[INPUT_BUFFER];
+        fgets(input, INPUT_BUFFER, stdin);
         int len = strlen(input);
         input[len - 1] = '\0';
-        Command buffer[1024];
-        parseInput(buffer, 1024, input);
+        Command buffer[MAX_COMMAND_PER_LINE];
+        parseInput(buffer, MAX_COMMAND_PER_LINE, input);
         // changeDirectory(input);
 #ifdef DEBUG
         printf("[MAIN_DEBUG] Input recieved: %s\n", input);
