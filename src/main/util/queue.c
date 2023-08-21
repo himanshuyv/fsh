@@ -53,7 +53,6 @@ void pop(Queue q) {
         q->front = q->front->next;
         free(oldFront->val);
         free(oldFront);
-        printf("here\n");
     }
 
     q->size--;

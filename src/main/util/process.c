@@ -5,15 +5,17 @@ void linkProcess(Process a, Process b) {
     if (b) b->prev = a;
 }
 
-Process newProcess(pid_t processID, int* statusPtr) {
+Process newProcess(char* processName, pid_t processID) {
     Process ret = (Process) malloc(sizeof(ProcessStruct));
+    ret->processName = (char*) malloc(sizeof(char) * (strlen(processName) + 1));
+    strcpy(ret->processName, processName);
     ret->next = NULL;
     ret->processID = processID;
-    ret->statusPtr = statusPtr;
     return ret;
 }
 
 void freeProcess(Process p) {
+    free(p->processName);
     free(p);
 }
 
@@ -28,13 +30,15 @@ void addToList(ProcessList* list, Process p) {
     *list = p;
 }
 
-void removeFromList(ProcessList* list, Process p) {
+Process removeFromList(ProcessList* list, Process p) {
+    Process ret = p->next;
     if (p == *list) {
         *list =  p->next;
     } else {
-        link(p->prev, p->next);
+        linkProcess(p->prev, p->next);
     }
     freeProcess(p);
+    return ret;
 }
 
 

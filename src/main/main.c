@@ -1,17 +1,23 @@
 #include "../header/headers.h"
 
+pid_t pid;
+
 void initialize() {
     initPrompt();
     initHistory();
 }
 
-void destruct() { destructHistory(); }
+void destruct() { 
+    destructHistory(); 
+    destructBackground();
+}
 
 #define INPUT_BUFFER_SIZE 4096
 
 int main() {
     initialize();
     while (1) {
+        printFinishedProcesses();
         prompt();
         char input[INPUT_BUFFER_SIZE];
         fgets(input, INPUT_BUFFER_SIZE, stdin);

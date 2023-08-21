@@ -22,18 +22,19 @@ int executeCommand(Command* command) {
             }
         }
     } else {
-        pid_t pid = fork();
+        pid = fork();
         if (pid == -1) {
-            fprintf(stderr, "[ERROR]: Unable to forkprocess, errno = %d",
+            fprintf(stderr, "[ERROR]: Unable to fork process, errno = %d",
                     errno);
         } else if (pid == 0) {
             execvp(command->argv[0], command->argv);
+            // TODO -1 = error
         } else {
             int status;
-            if (!command->isBackground)
+            if (command->isBackground) {
+                addProcess(command->argv[0], pid);
+            } else {
                 waitpid(pid, &status, 0);
-            else {
-                printf("%d\n", pid);
             }
         }
     }

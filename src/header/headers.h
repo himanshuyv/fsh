@@ -10,11 +10,14 @@
 #include <unistd.h>
 #include <wait.h>
 #define MAX_COMMAND_PER_LINE 128
-#define DEBUG
+// #define DEBUG
+
+extern pid_t pid;
 
 #include "executing.h"
 #include "parsing.h"
 #include "pastevents.h"
+#include "process_handling.h"
 #include "prompt.h"
 #include "util/command.h"
 #include "util/history.h"
