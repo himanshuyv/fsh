@@ -24,13 +24,14 @@ int executeCommand(Command* command) {
     } else {
         pid_t pid = fork();
         if (pid == -1) {
-            fprintf(stderr, "[ERROR]: Unable to forkprocess, errno = %d", errno);
+            fprintf(stderr, "[ERROR]: Unable to forkprocess, errno = %d",
+                    errno);
         } else if (pid == 0) {
             execvp(command->argv[0], command->argv);
-            
         } else {
             int status;
-            if (!command->isBackground) waitpid(pid, &status, 0);
+            if (!command->isBackground)
+                waitpid(pid, &status, 0);
             else {
                 printf("%d\n", pid);
             }

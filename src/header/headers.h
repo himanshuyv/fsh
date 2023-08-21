@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <wait.h>
 #define MAX_COMMAND_PER_LINE 128
 #define DEBUG
@@ -18,6 +18,7 @@
 #include "prompt.h"
 #include "util/command.h"
 #include "util/history.h"
+#include "util/process.h"
 #include "util/queue.h"
 #include "warp.h"
 #endif
