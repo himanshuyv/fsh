@@ -12,8 +12,6 @@
 #define MAX_COMMAND_PER_LINE 128
 // #define DEBUG
 
-extern pid_t pid;
-
 #include "executing.h"
 #include "parsing.h"
 #include "pastevents.h"

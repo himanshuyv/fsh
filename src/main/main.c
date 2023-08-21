@@ -1,7 +1,5 @@
 #include "../header/headers.h"
 
-pid_t pid;
-
 void initialize() {
     initPrompt();
     initHistory();

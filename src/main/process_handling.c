@@ -14,34 +14,28 @@ void destructBackground() {
 }
 
 void printFinishedProcesses() {
-
-    int status;
-    waitpid(pid, &status, WNOHANG | WUNTRACED);
-    if (status)
-    {
-        printf("%i exited normally\n", pid);
-    }
     for (Process itr = backgroundList; itr != NULL;) {
         int status;
-        waitpid(itr->processID, &status, WNOHANG | WUNTRACED);
-
+        int ret = waitpid(itr->processID, &status, WNOHANG);
+        // printf("ret = %d\n", ret);
+        if (ret == 0) {
+            itr = itr->next;
+            continue;
+        }
 #ifdef DEBUG
+        printf("status: %b\n", status);
         printf("\nProcess Name: %s\n", itr->processName);
         printf("Process Number: %d\n", itr->processID);
         printf("Process Status: %d\n", *(itr->statusPtr));
 #endif
 
-    if (WIFEXITED(status)) {
-        printf("%s exited normally (killed) (%d)\n", itr->processName, itr->processID);
-        itr = removeFromList(&backgroundList, itr);
-        backgroundListSize--;
-    } else if (WIFSTOPPED(status)) {
-        printf("%s exited normally (suspended) (%d)\n", itr->processName, itr->processID);
-        itr = removeFromList(&backgroundList, itr);
-        backgroundListSize--;
-    } else {
-        itr = itr->next;
-    }
+        if (WIFEXITED(status)) {
+            printf("%s exited normally (killed) (%d)\n", itr->processName, itr->processID);
+            itr = removeFromList(&backgroundList, itr);
+            backgroundListSize--;
+        } else {
+            itr = itr->next;
+        }
     }
 }
 

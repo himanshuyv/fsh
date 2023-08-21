@@ -22,7 +22,7 @@ int executeCommand(Command* command) {
             }
         }
     } else {
-        pid = fork();
+        pid_t pid = fork();
         if (pid == -1) {
             fprintf(stderr, "[ERROR]: Unable to fork process, errno = %d",
                     errno);
@@ -32,6 +32,7 @@ int executeCommand(Command* command) {
         } else {
             int status;
             if (command->isBackground) {
+                printf("%d\n", pid);
                 addProcess(command->argv[0], pid);
             } else {
                 waitpid(pid, &status, 0);
