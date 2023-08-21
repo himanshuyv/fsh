@@ -8,12 +8,13 @@
 #include <string.h>
 #include <unistd.h>
 
-// #define DEBUG
+#define DEBUG
 
 #include "executing.h"
 #include "parsing.h"
 #include "prompt.h"
 #include "util/command.h"
+#include "util/history.h"
 #include "util/queue.h"
 #include "warp.h"
 #endif

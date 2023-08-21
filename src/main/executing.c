@@ -9,7 +9,12 @@ int executeCommand(Command* command) {
     char* commandName = command->argv[0];
     if (strcmp(commandName, "warp") == 0) {
         warp(command);
-    } 
+    } else if (strcmp(commandName, "pastevents") == 0) {
+        int historySize = getHistorySize();
+        for (int i = 1; i <= historySize; i++) {
+            printf("%s\n", getKthLastEvent(i));
+        }
+    }
 
     return EXEC_SUCCESS;
 }

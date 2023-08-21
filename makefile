@@ -5,4 +5,4 @@ debug:
 	gcc -g -Wall -fsanitize=address,undefined src/main/*.c src/main/util/*.c
 
 clean:
-	rm *.out
+	rm *.out .osn_shell_history
