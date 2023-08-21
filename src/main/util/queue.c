@@ -14,6 +14,7 @@ void linkNode(Node a, Node b) {
 void freeNodeList(Node n) {
     if (n == NULL) return;
     freeNodeList(n->next);
+    free(n->val);
     free(n);
 }
 
@@ -38,23 +39,22 @@ void push(Queue q, T val) {
     q->size++;
 }
 
-T pop(Queue q) {
-    if (q == NULL) return NULL;
-    if (q->size == 0) return NULL;
-    Node ret;
+void pop(Queue q) {
+    if (q == NULL) return;
+    if (q->size == 0) return;
     if (q->size == 1) {
-        ret = q->front;
+        free(q->front->val);
         free(q->front);
         q->front = q->rear = NULL;
     } else {
         Node oldFront = q->front;
-        ret = oldFront;
         q->front = q->front->next;
+        free(oldFront->val);
         free(oldFront);
+        printf("here\n");
     }
 
     q->size--;
-    return ret->val;
 }
 
 T front(Queue q) {
@@ -64,5 +64,6 @@ T front(Queue q) {
 }
 
 void freeQueue(Queue q) {
-    freeNodeList(q->front);
+    if (q->size) freeNodeList(q->front);
+    free(q);
 }

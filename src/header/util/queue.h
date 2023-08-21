@@ -22,7 +22,7 @@ typedef QueueStruct* Queue;
 
 Queue newQueue();
 void push(Queue q, T val);
-T pop(Queue q);
+void pop(Queue q);
 T front(Queue q);
-
+void freeQueue(Queue q);
 #endif
