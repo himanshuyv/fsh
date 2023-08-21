@@ -4,11 +4,13 @@ Node newNode(T val) {
     Node ret = (Node) malloc(sizeof(NodeStruct));
     ret->val = val;
     ret->next = NULL;
+    ret->prev = NULL;
     return ret;
 }
 
 void linkNode(Node a, Node b) {
     if (a) a->next = b;
+    if (b) b->prev = a;
 }
 
 void freeNodeList(Node n) {

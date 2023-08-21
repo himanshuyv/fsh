@@ -18,11 +18,11 @@ int tokenize(Command* c, char* commandStr) {
     if (argc == 0) return -1;
 
     c->argc = argc;
-    c->argv = (char**) malloc(sizeof(char*) * argc);
+    c->argv = (char**) malloc(sizeof(char*) * (argc + 1));
     for (int i = 0; i < argc; i++) {
         c->argv[i] = argv[i];
     }
-
+    c->argv[argc] = NULL;
 #ifdef DEBUG
     printf("[TOKENIZE_DEBUG] Token count: %ld, Tokens: ", argc);
     for (int i = 0; i < argc; i++) {

@@ -3,7 +3,7 @@
 Queue eventQueue;
 FILE* historyFile;
 char historyFilePath[DIRECTORY_BUFFER_SIZE];
-void initHistory() {  // TODO change to struct with array of 15
+void initHistory() {  // TODO change to struct with array of MAX_HISTORY_SIZE
     eventQueue = newQueue();
     strcpy(historyFilePath, homeDirectory);
     strcat(historyFilePath, "/.osn_shell_history");
@@ -24,7 +24,7 @@ void initHistory() {  // TODO change to struct with array of 15
         fclose(historyFile);
     }
 
-    while (eventQueue->size > 15) {
+    while (eventQueue->size > MAX_HISTORY_SIZE) {
         pop(eventQueue);
     }
 }
@@ -59,7 +59,20 @@ void destructHistory() {
 bool addEvent(Command* commands, int commandCt, char* inputString) {
     char* newString = (char*)malloc(sizeof(char) * (strlen(inputString) + 1));
     strcpy(newString, inputString);
-    // TODO check if commands contains pastevents
+    
+    bool containsPastEvents = false;
+    for (int i = 0; i < commandCt; i++) {
+        if (strcmp(commands[i].argv[0], "pastevents") == 0) {
+            containsPastEvents = true;
+            break;
+        }
+    }
+
+    if (containsPastEvents) {
+        free(newString);
+        return false;
+    }
+
     if (eventQueue->size == 0) {
         push(eventQueue, newString);
     } else if (strcmp(front(eventQueue), newString) == 0) {
@@ -69,7 +82,7 @@ bool addEvent(Command* commands, int commandCt, char* inputString) {
         push(eventQueue, newString);
     }
     
-    while (eventQueue->size > 15) pop(eventQueue);
+    while (eventQueue->size > MAX_HISTORY_SIZE) pop(eventQueue);
     writeHistory();
     return true;
 }
@@ -80,10 +93,10 @@ char* getKthLastEvent(int k) {
                 eventQueue->size);
         return NULL;
     }
-
-    Node itr = eventQueue->front;
+    
+    Node itr = eventQueue->rear;
     for (int i = 1; i < k; i++) {
-        itr = itr->next;
+        itr = itr->prev;
     }
 
     return itr->val;

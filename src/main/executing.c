@@ -10,9 +10,30 @@ int executeCommand(Command* command) {
     if (strcmp(commandName, "warp") == 0) {
         warp(command);
     } else if (strcmp(commandName, "pastevents") == 0) {
-        int historySize = getHistorySize();
-        for (int i = 1; i <= historySize; i++) {
-            printf("%s\n", getKthLastEvent(i));
+        if (command->argc == 1) {
+            for (Node itr = eventQueue->front; itr != NULL; itr = itr->next) {
+                printf("%s\n", itr->val);
+            }
+        } else {
+            if (strcmp(command->argv[1], "purge") == 0) {
+                purge();
+            } else if (strcmp(command->argv[1], "execute") == 0) {
+                pastEventsExecute(command);
+            }
+        }
+    } else {
+        pid_t pid = fork();
+        if (pid == -1) {
+            fprintf(stderr, "[ERROR]: Unable to forkprocess, errno = %d", errno);
+        } else if (pid == 0) {
+            execvp(command->argv[0], command->argv);
+            
+        } else {
+            int status;
+            if (!command->isBackground) waitpid(pid, &status, 0);
+            else {
+                printf("%d\n", pid);
+            }
         }
     }
 

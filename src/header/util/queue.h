@@ -8,6 +8,7 @@
 typedef struct NodeStruct {
     T val;
     struct NodeStruct* next;
+    struct NodeStruct* prev;
 } NodeStruct;
 
 typedef struct NodeStruct* Node;

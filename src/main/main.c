@@ -1,15 +1,12 @@
 #include "../header/headers.h"
 
-void initialize() { 
+void initialize() {
     initPrompt();
-    initHistory(); 
+    initHistory();
 }
 
-void destruct() {
-    destructHistory();
-}
+void destruct() { destructHistory(); }
 
-#define MAX_COMMAND_PER_LINE 128
 #define INPUT_BUFFER_SIZE 4096
 
 int main() {
