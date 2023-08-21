@@ -7,7 +7,7 @@ Node newNode(T val) {
     return ret;
 }
 
-void link(Node a, Node b) {
+void linkNode(Node a, Node b) {
     if (a) a->next = b;
 }
 
@@ -22,6 +22,7 @@ Queue newQueue() {
     ret->front = NULL;
     ret->rear = NULL;
     ret->size = 0;
+    return ret;
 }
 
 void push(Queue q, T val) {
@@ -30,7 +31,7 @@ void push(Queue q, T val) {
     if (q->size == 0) {
         q->front = q->rear = newElement;
     } else {
-        link(q->rear, newElement);
+        linkNode(q->rear, newElement);
         q->rear = newElement;
     }
 
@@ -40,16 +41,20 @@ void push(Queue q, T val) {
 T pop(Queue q) {
     if (q == NULL) return NULL;
     if (q->size == 0) return NULL;
+    Node ret;
     if (q->size == 1) {
+        ret = q->front;
         free(q->front);
         q->front = q->rear = NULL;
     } else {
         Node oldFront = q->front;
+        ret = oldFront;
         q->front = q->front->next;
         free(oldFront);
     }
 
     q->size--;
+    return ret->val;
 }
 
 T front(Queue q) {

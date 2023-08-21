@@ -3,14 +3,14 @@
 
 #include "command.h"
 
-#define T Command*
+#define T char*
 
 typedef struct NodeStruct {
     T val;
-    NodeStruct* next;
+    struct NodeStruct* next;
 } NodeStruct;
 
-typedef NodeStruct* Node;
+typedef struct NodeStruct* Node;
 
 typedef struct QueueStruct {
     size_t size;
@@ -20,6 +20,7 @@ typedef struct QueueStruct {
 
 typedef QueueStruct* Queue;
 
+Queue newQueue();
 void push(Queue q, T val);
 T pop(Queue q);
 T front(Queue q);
