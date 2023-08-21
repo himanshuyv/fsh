@@ -2,15 +2,6 @@
 
 #define RADIX 10
 
-bool isNum(char* str) {
-    if (str[0] == '\0') return false;
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] < '0' || str[i] > '9') return false;
-    }
-
-    return true;
-}
-
 int purge() {
     int queueSize = getHistorySize();
     for (int i = 0; i < queueSize; i++) {

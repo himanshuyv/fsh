@@ -17,7 +17,6 @@ void printFinishedProcesses() {
     for (Process itr = backgroundList; itr != NULL;) {
         int status;
         int ret = waitpid(itr->processID, &status, WNOHANG);
-        // printf("ret = %d\n", ret);
         if (ret == 0) {
             itr = itr->next;
             continue;

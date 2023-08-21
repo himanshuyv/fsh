@@ -1,5 +1,14 @@
 #include "../header/headers.h"
 
+bool isNum(char* str) {
+    if (str[0] == '\0') return false;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] < '0' || str[i] > '9') return false;
+    }
+
+    return true;
+}
+
 int executeCommand(Command* command) {
     if (command->argc == 0) {
         fprintf(stderr, "[ERROR]: Command has length 0\n");
@@ -21,6 +30,18 @@ int executeCommand(Command* command) {
                 pastEventsExecute(command);
             }
         }
+
+    } else if (strcmp(commandName, "proclore") == 0) {
+        if (command->argc == 1) {
+            proclore(getpid());
+        } else if (command->argc == 2) {
+            if (isNum(command->argv[1])) {
+                proclore(atoi(command->argv[1]));
+            } else {
+                fprintf(stderr, "[ERROR]: Expected PID, found: %s\n", command->argv[1]);
+                return EXEC_FAILURE;
+            }
+        }   
     } else {
         pid_t pid = fork();
         if (pid == -1) {

@@ -10,7 +10,7 @@ void destruct() {
     destructBackground();
 }
 
-#define INPUT_BUFFER_SIZE 4096
+#define INPUT_BUFFER_SIZE 2048
 
 int main() {
     initialize();
