@@ -11,5 +11,5 @@ typedef struct Command {
 } Command;
 
 void freeCommand(Command* c);
-
+bool isEqual(Command* a, Command* b);
 #endif
