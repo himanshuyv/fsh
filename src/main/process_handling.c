@@ -25,7 +25,6 @@ void printFinishedProcesses() {
         printf("status: %b\n", status);
         printf("\nProcess Name: %s\n", itr->processName);
         printf("Process Number: %d\n", itr->processID);
-        printf("Process Status: %d\n", *(itr->statusPtr));
 #endif
 
         if (WIFEXITED(status)) {
