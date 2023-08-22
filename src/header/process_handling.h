@@ -9,6 +9,6 @@ extern ProcessList backgroundList;
 void initBackground();
 void destructBackground();
 void printFinishedProcesses();
-void addProcess(char* processName, pid_t processID);
+int addProcess(char* processName, pid_t processID);
 
 #endif

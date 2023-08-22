@@ -35,7 +35,8 @@ int executeProclore(Command* command) {
         if (isNum(command->argv[1]))
             exitCode = proclore(atoi(command->argv[1]));
         else {
-            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n", command->argv[1]);
+            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n",
+                    command->argv[1]);
             exitCode = EXEC_FAILURE;
         }
     }
@@ -51,18 +52,16 @@ int executeSys(Command* command) {
         exitCode = 1;
     } else if (pid == 0) {
         if (execvp(command->argv[0], command->argv) == -1) {
-            fprintf(stderr, "[ERROR]: Bad shell command \'%s\'\n",
-                    command->argv[0]);
+            fprintf(stderr, "[ERROR]: Bad shell command \'%s\'\n", command->argv[0]);
             exitCode = 1;
         }
     } else {
         int status;
         if (command->isBackground) {
             printf("%d\n", pid);
-            exitCode = (command->argv[0], pid);
-        } else {
+            exitCode = addProcess(command->argv[0], pid);
+        } else
             waitpid(pid, &status, 0);
-        }
     }
 
     return exitCode;
@@ -81,11 +80,10 @@ int executeCommand(Command* command) {
         exitCode = warp(command);
     else if (strcmp(commandName, "pastevents") == 0)
         exitCode = executePastEvents(command);
-    else if (strcmp(commandName, "proclore") == 0) {
+    else if (strcmp(commandName, "proclore") == 0)
         exitCode = executeProclore(command);
-    } else {
+    else
         exitCode = executeSys(command);
-    }
 
     return exitCode;
 }
