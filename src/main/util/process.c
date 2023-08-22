@@ -7,6 +7,10 @@ void linkProcess(Process a, Process b) {
 
 Process newProcess(char* processName, pid_t processID) {
     Process ret = (Process) malloc(sizeof(ProcessStruct));
+    if (ret == NULL) {
+        fprintf(stderr, "[ERROR]: Bad malloc()\n");
+        return NULL;
+    }
     ret->processName = (char*) malloc(sizeof(char) * (strlen(processName) + 1));
     strcpy(ret->processName, processName);
     ret->next = NULL;

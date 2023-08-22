@@ -38,7 +38,9 @@ void printFinishedProcesses() {
     }
 }
 
-void addProcess(char* processName, pid_t processID) {
+int addProcess(char* processName, pid_t processID) {
     Process new = newProcess(processName, processID);
-    addToList(&backgroundList, new);    
+    if (new == NULL) return 1;
+    addToList(&backgroundList, new);
+    return 0;    
 }
