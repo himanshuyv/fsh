@@ -2,6 +2,7 @@
 #define HEADERS_H_
 
 #include <errno.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +19,7 @@
 #include "process_handling.h"
 #include "proclore.h"
 #include "prompt.h"
+#include "util/colors.h"
 #include "util/command.h"
 #include "util/history.h"
 #include "util/process.h"
