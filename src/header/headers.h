@@ -35,6 +35,7 @@
 #include "util/process.h"
 #include "util/queue.h"
 #include "warp.h"
+
 bool isNum(char* str);
 bool isBlank(char* str);
 void replaceHomeDirPrefix(char* path);

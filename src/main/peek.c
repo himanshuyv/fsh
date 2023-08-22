@@ -5,32 +5,40 @@
 green for executables, white for files and blue for directories
 
 */
-int peekHelperShort(struct dirent** dir, int fileCount, bool allFlag) {
+
+void printFileName(struct dirent* file, struct stat fileStat) {
+    switch (file->d_type) {
+        case DT_REG:
+            char* color = COLOR_WHITE;
+            if (fileStat.st_mode & S_IXUSR) color = COLOR_GREEN;
+            colorPrintf(color, "%s ", file->d_name);
+            break;
+        case DT_DIR:
+            colorPrintf(COLOR_BLUE, "%s ", file->d_name);
+            break;
+        default:
+            colorPrintf(COLOR_RED, "%s* ", file->d_name);
+            break;
+    }
+}
+
+int peekHelperShort(char* prefix, struct dirent** dir, int fileCount, bool allFlag) {
     for (int i = 0; i < fileCount; i++) {
         // printf("here\n");
         struct dirent* file = dir[i];
         struct stat fileStat;
         if (!allFlag && file->d_name[0] == '.') continue;
-        int statErrorCode = stat(file->d_name, &fileStat);
+        char absFile[DIRECTORY_BUFFER_SIZE];
+        strcpy(absFile, prefix);
+        strcat(absFile, file->d_name);
+        int statErrorCode = stat(absFile, &fileStat);
         if (statErrorCode == -1)
             fprintf(stderr, "[ERROR]: Error calling stat on %s\n",
                     file->d_name);
-        switch (file->d_type) {
-            case DT_REG:
-                char* color = COLOR_WHITE;
-                if (fileStat.st_mode & S_IXUSR) color = COLOR_GREEN;
-                colorPrintf(color, "%s ", file->d_name);
-                break;
-            case DT_DIR:
-                colorPrintf(COLOR_BLUE, "%s ", file->d_name);
-                break;
-            default:
-                colorPrintf(COLOR_RED, "%s* ", file->d_name);
-                break;
-        }
+        printFileName(file, fileStat);
     }
-
     printf("\n");
+
     for (int i = 0; i < fileCount; i++) {
         free(dir[i]);
     }
@@ -39,9 +47,12 @@ int peekHelperShort(struct dirent** dir, int fileCount, bool allFlag) {
     return EXEC_SUCCESS;
 }
 
-int makeFileLine(struct dirent* file) {
+int makeFileLine(char* prefix, struct dirent* file) {
     struct stat fileStat;
-    int statErrorCode = stat(file->d_name, &fileStat);
+    char absPath[DIRECTORY_BUFFER_SIZE];
+    strcpy(absPath, prefix);
+    strcat(absPath, file->d_name);
+    int statErrorCode = stat(absPath, &fileStat);
     if (statErrorCode == -1) {
         fprintf(stderr, "[ERROR]: Error calling stat on %s\n", file->d_name);
         return EXEC_FAILURE;
@@ -106,19 +117,19 @@ int makeFileLine(struct dirent* file) {
     char* fileModifiedTime = ctime(&fileStat.st_mtime);
     int fileModifiedTimeLen = strlen(fileModifiedTime);
     fileModifiedTime[fileModifiedTimeLen - 1] = '\0'; 
-    // name
-    char* fileName = file->d_name;
 
-    printf("%c%s %lu %s %s %ld %s %s\n", fileTypeChar, permissionString, numberOfLinks, ownerName, groupName, fileSize, fileModifiedTime, fileName);
+    printf("%c%s %lu %s %s %ld %s ", fileTypeChar, permissionString, numberOfLinks, ownerName, groupName, fileSize, fileModifiedTime);
+    printFileName(file, fileStat);
+    printf("\n");
     return EXEC_SUCCESS;
 }
 
-int peekHelperLong(struct dirent** dir, int fileCount, bool allFlag) {
+int peekHelperLong(char* prefix, struct dirent** dir, int fileCount, bool allFlag) {
     int exitCode = 0;
     for (int i = 0; i < fileCount; i++) {
         struct dirent* file = dir[i];
         if (!allFlag && file->d_name[0] == '.') continue;
-        exitCode |= makeFileLine(file);
+        exitCode |= makeFileLine(prefix, file);
     }
 
     for (int i = 0; i < fileCount; i++) {
@@ -129,29 +140,45 @@ int peekHelperLong(struct dirent** dir, int fileCount, bool allFlag) {
     return exitCode;
 }
 
+int setFlags(Command* command, bool* allFlagPtr, bool* longFlagPtr, char* dirPath) {
+    strcpy(dirPath, ".");
+    if (command->argc == 1) {
+        *allFlagPtr = false;
+        *longFlagPtr = false;
+        return EXEC_SUCCESS;
+    }
+
+    int aCt = 0, lCt = 0;
+    for (int i = 1; i < command->argc; i++) {
+        if (command->argv[i][0] != '-') strcpy(dirPath, command->argv[i]);
+        else {
+            for (int j = 1; j < strlen(command->argv[i]); j++) {
+                if (command->argv[i][j] != 'a' && command->argv[i][j] != 'l') {
+                    fprintf(stderr, "[ERROR]: Unknown option for peek \'%c\'\n", command->argv[i][j]);
+                    return EXEC_FAILURE;
+                }
+
+                if (command->argv[i][j] == 'a') aCt++;
+                else lCt++;
+            }
+        }
+    }
+
+    *allFlagPtr = aCt > 0;
+    *longFlagPtr = lCt > 0;
+    return EXEC_SUCCESS;
+}
+
 int peek(Command* command) {
     int exitCode = 0;
-    char* dirPath = ".";
+    char dirPath[DIRECTORY_BUFFER_SIZE];
     bool allFlag = 0, longFlag = 0;
-    if (command->argc == 1) {
-        dirPath = ".";
-    } else {
-        char option;
-        optind = 1;
-        while ((option = getopt(command->argc, command->argv, "-:al")) != -1) {
-            printf("here with option %c\n", option);
-            switch(option) {
-                case 'a': allFlag = true; break;
-                case 'l': longFlag = true; break;
-                case 1: dirPath = optarg;
-                case '?':
-                    fprintf(stderr, "[ERROR]: Unknown option for peek \'%c\'\n", optopt);
-                    return EXEC_FAILURE;
-            }
-            printf("done with option %c\n", option);
-        }
-        printf("final value of option = %d\n", option);
-    }
+
+    if (setFlags(command, &allFlag, &longFlag, dirPath))
+        return EXEC_FAILURE;
+
+    replaceTildaWithHome(dirPath);
+    strcat(dirPath, "/");
     struct dirent** dir;
     int fileCount = scandir(dirPath, &dir, NULL, alphasort);
     if (fileCount < 0) {
@@ -159,7 +186,7 @@ int peek(Command* command) {
         return EXEC_FAILURE;
     }
 
-    if (longFlag) exitCode = peekHelperLong(dir, fileCount, allFlag);
-    else exitCode = peekHelperShort(dir, fileCount, allFlag);
+    if (longFlag) exitCode = peekHelperLong(dirPath, dir, fileCount, allFlag);
+    else exitCode = peekHelperShort(dirPath, dir, fileCount, allFlag);
     return exitCode;
 }
