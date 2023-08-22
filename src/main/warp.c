@@ -1,15 +1,19 @@
 #include "../header/headers.h"
 
+void replaceTildaWithHome(char* path) {
+    char temp[DIRECTORY_BUFFER_SIZE] = {'\0'};
+    strcpy(temp, homeDirectory);
+    strcat(temp, path + 1);
+    strcpy(path, temp);
+}
+
 int changeDirectory(char* path) {
     int pathLength = strlen(path);
     int errorCode;
     if (pathLength == 0) {
         errorCode = chdir(homeDirectory);
     } else if (path[0] == '~') {
-        char temp[DIRECTORY_BUFFER_SIZE] = {'\0'};
-        strcpy(temp, homeDirectory);
-        strcat(temp, path + 1);
-        strcpy(path, temp);
+        replaceTildaWithHome(path);
         errorCode = chdir(path);
     } else if (pathLength == 1) {
         if (path[0] == '-') {
@@ -49,9 +53,12 @@ int warp(Command* command) {
         exitCode = changeDirectory("");
     } else {
         exitCode = 0;
-        for (int i = 1; i < command->argc; i++) exitCode |= (changeDirectory(command->argv[i]) > 0);
+        for (int i = 1; i < command->argc; i++)
+            exitCode |= (changeDirectory(command->argv[i]) > 0);
     }
 
-    if (exitCode > 0) return EXEC_FAILURE;
-    else return EXEC_SUCCESS;
+    if (exitCode > 0)
+        return EXEC_FAILURE;
+    else
+        return EXEC_SUCCESS;
 }

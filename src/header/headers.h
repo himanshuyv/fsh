@@ -39,4 +39,5 @@ bool isNum(char* str);
 bool isBlank(char* str);
 void replaceHomeDirPrefix(char* path);
 bool isHomeDirPrefix(char* path);
+void replaceTildaWithHome(char* path);
 #endif
