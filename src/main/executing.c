@@ -2,10 +2,16 @@
 
 bool isNum(char* str) {
     if (str[0] == '\0') return false;
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] < '0' || str[i] > '9') return false;
-    }
+    for (int i = 0; str[i] != '\0'; i++)
+        if (!isdigit(str[i])) return false;
+    
+    return true;
+}
 
+bool isBlank(char* str) {
+    for (int i = 0; str[i] != '\0'; i++)
+        if (!isspace(str[i])) return false;
+    
     return true;
 }
 
@@ -65,6 +71,10 @@ int executeSys(Command* command) {
     }
 
     return exitCode;
+}
+
+int executePeek() {
+    
 }
 
 int executeCommand(Command* command) {

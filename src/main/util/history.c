@@ -57,34 +57,41 @@ void destructHistory() {
 }
 
 bool addEvent(Command* commands, int commandCt, char* inputString) {
+    bool toAdd = true;
     char* newString = (char*)malloc(sizeof(char) * (strlen(inputString) + 1));
     strcpy(newString, inputString);
     
-    bool containsPastEvents = false;
     for (int i = 0; i < commandCt; i++) {
         if (strcmp(commands[i].argv[0], "pastevents") == 0) {
-            containsPastEvents = true;
+            toAdd = false;
             break;
         }
     }
 
-    if (containsPastEvents) {
-        free(newString);
-        return false;
-    }
+    if (commandCt == 0)
+        toAdd = false;
 
-    if (eventQueue->size == 0) {
-        push(eventQueue, newString);
-    } else if (strcmp(front(eventQueue), newString) == 0) {
-        free(newString);
-        return false;
-    } else {
-        push(eventQueue, newString);
-    }
+    if (eventQueue->size && strcmp(front(eventQueue), newString) == 0) 
+        toAdd = false;
+
+    // if (eventQueue->size == 0) {
+    //     push(eventQueue, newString);
+    // } else if (strcmp(front(eventQueue), newString) == 0) {
+    //     free(newString);
+    //     return false;
+    // } else {
+    //     push(eventQueue, newString);
+    // }
     
+    if (toAdd)
+        push(eventQueue, newString);
+    else
+        free(newString);
+
     while (eventQueue->size > MAX_HISTORY_SIZE) pop(eventQueue);
     writeHistory();
-    return true;
+    
+    return toAdd;
 }
 
 char* getKthLastEvent(int k) {

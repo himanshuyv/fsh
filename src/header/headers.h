@@ -1,6 +1,7 @@
 #ifndef HEADERS_H_
 #define HEADERS_H_
 
+#include <dirent.h>
 #include <errno.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -10,6 +11,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <wait.h>
+#include <ctype.h>
 #define MAX_COMMAND_PER_LINE 32
 // #define DEBUG
 
@@ -27,5 +29,5 @@
 #include "warp.h"
 
 bool isNum(char* str);
-
+bool isBlank(char* str);
 #endif
