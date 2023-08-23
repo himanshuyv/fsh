@@ -12,6 +12,12 @@
 #define COLOR_CYAN "\033[36;1m"
 #define COLOR_WHITE "\033[37;1m"
 
+#define EXECUTABLE_COLOR COLOR_GREEN
+#define FILE_COLOR COLOR_WHITE
+#define DIRECTORY_COLOR COLOR_BLUE
+
+#define USERNAME_COLOR COLOR_BLUE
+#define SYSNAME_COLOR COLOR_CYAN
 void colorPrintf(char* color, char* format, ...);
 
 #endif

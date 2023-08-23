@@ -58,5 +58,10 @@ void prompt() {
     printf("[PROMPT_DEBUG] previousDirectory: %s\n", previousDirectory);
 #endif
 
-    printf("<%s@%s:%s>", userName, sysName, currentDirectory);
+    // printf("<%s@%s:%s>", userName, sysName, currentDirectory);
+    colorPrintf(COLOR_BLUE, "<");
+    colorPrintf(USERNAME_COLOR, "%s", userName);
+    colorPrintf(COLOR_BLUE, "@");
+    colorPrintf(SYSNAME_COLOR, "%s", sysName);
+    colorPrintf(COLOR_BLUE, ":%s>", currentDirectory);
 }

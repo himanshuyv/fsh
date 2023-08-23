@@ -29,14 +29,14 @@ int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, b
         strcat(directory, file->d_name);
         if (!fileOnlyFlag && ((fileStat.st_mode & S_IFMT) == S_IFDIR)) {
             if (strstr(file->d_name, target)) {
-                colorPrintf(COLOR_BLUE, "%s\n", directory + initialPathLength);
+                colorPrintf(DIRECTORY_COLOR, "%s\n", directory + initialPathLength);
                 matchedFileCount++;
                 strcpy(matchedFilePath, absPath);
             }
             search(directory, target, dirOnlyFlag, fileOnlyFlag, oneFlag, initialPathLength);
         } else if (!dirOnlyFlag) {
             if (strstr(file->d_name, target)) {
-                colorPrintf(COLOR_GREEN, "%s\n", directory + initialPathLength);
+                colorPrintf(EXECUTABLE_COLOR, "%s\n", directory + initialPathLength);
                 matchedFileCount++;
                 strcpy(matchedFilePath, absPath);
             }

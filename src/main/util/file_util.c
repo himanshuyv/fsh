@@ -49,12 +49,12 @@ int getStat(char* prefix, char* fileName, struct stat* fileStat) {
 void printFileName(struct dirent* file, struct stat fileStat) {
     switch (file->d_type) {
         case DT_REG:
-            char* color = COLOR_WHITE;
-            if (fileStat.st_mode & S_IXUSR) color = COLOR_GREEN;
+            char* color = FILE_COLOR;
+            if (fileStat.st_mode & S_IXUSR) color = EXECUTABLE_COLOR;
             colorPrintf(color, "%s ", file->d_name);
             break;
         case DT_DIR:
-            colorPrintf(COLOR_BLUE, "%s ", file->d_name);
+            colorPrintf(DIRECTORY_COLOR, "%s ", file->d_name);
             break;
         default:
             colorPrintf(COLOR_RED, "%s* ", file->d_name);
