@@ -32,6 +32,7 @@ void replaceTildaWithHome(char* path) {
 }
 
 void getAbsolutePath(char* prefix, char* fileName, char* buffer) {
+    // printf("prefix: %s fileName: %s\n", prefix, fileName);
     strcpy(buffer, prefix);
     strcat(buffer, fileName);
 }
@@ -39,8 +40,8 @@ void getAbsolutePath(char* prefix, char* fileName, char* buffer) {
 int getStat(char* prefix, char* fileName, struct stat* fileStat) {
     char absPath[DIRECTORY_BUFFER_SIZE];
     getAbsolutePath(prefix, fileName, absPath);
-    if (stat(absPath, fileStat)) {
-        fprintf(stderr, "[ERROR]: Error calling stat on %s\n", fileName);
+    if (stat(absPath, fileStat) == -1) {
+        fprintf(stderr, "[ERROR]: Error calling stat on %s\n", absPath);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;

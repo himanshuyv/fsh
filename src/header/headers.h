@@ -37,4 +37,7 @@
 #include "util/queue.h"
 bool isNum(char* str);
 bool isBlank(char* str);
+
+extern char longestCommand[DIRECTORY_BUFFER_SIZE];
+extern time_t longestTime;
 #endif

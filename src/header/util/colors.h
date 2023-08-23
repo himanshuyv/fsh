@@ -16,8 +16,8 @@
 #define FILE_COLOR COLOR_WHITE
 #define DIRECTORY_COLOR COLOR_BLUE
 
-#define USERNAME_COLOR COLOR_BLUE
-#define SYSNAME_COLOR COLOR_CYAN
+#define USERNAME_COLOR COLOR_GREEN
+#define SYSNAME_COLOR COLOR_WHITE
 void colorPrintf(char* color, char* format, ...);
 
 #endif

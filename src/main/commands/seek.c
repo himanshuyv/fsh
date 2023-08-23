@@ -5,21 +5,18 @@ char matchedFilePath[DIRECTORY_BUFFER_SIZE];
 int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, bool oneFlag, int initialPathLength) {
     int exitCode = 0;
     struct dirent** dir;
-    int fileCount = scandir(directory, &dir, NULL, alphasort);
+    int fileCount = scandir(directory, &dir, NULL, NULL);
     if (directory[strlen(directory) - 1] != '/')
         strcat(directory, "/");
     for (int i = 0; i < fileCount; i++) {
         struct dirent* file = dir[i];
         int fileNameLength = strlen(file->d_name);
-        if (fileNameLength && file->d_name[0] == '.' && file->d_name[1] == '\0')
-            continue;
-        if (fileNameLength > 1 && file->d_name[0] == '.' && file->d_name[1] == '.' && file->d_name[2] == '\0')
+        if (fileNameLength == 0 || file->d_name[0] == '.')
             continue;
 
-        struct stat fileStat;
         char absPath[DIRECTORY_BUFFER_SIZE];
         getAbsolutePath(directory, file->d_name, absPath);
-        exitCode = getStat(directory, file->d_name, &fileStat);
+        // exitCode = getStat(directory, file->d_name, &fileStat);
         
         int directoryLength = strlen(directory);
         if (directory[directoryLength - 1] != '/') {
@@ -27,7 +24,7 @@ int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, b
             directoryLength++;
         }
         strcat(directory, file->d_name);
-        if (!fileOnlyFlag && ((fileStat.st_mode & S_IFMT) == S_IFDIR)) {
+        if (!fileOnlyFlag && (file->d_type == DT_DIR)) {
             if (strstr(file->d_name, target)) {
                 colorPrintf(DIRECTORY_COLOR, "%s\n", directory + initialPathLength);
                 matchedFileCount++;
@@ -44,7 +41,7 @@ int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, b
         directory[directoryLength] = '\0';
     }
 
-    freeDirent(dir, fileCount);
+    if (fileCount >= 0) freeDirent(dir, fileCount);
     return exitCode;
 }
 

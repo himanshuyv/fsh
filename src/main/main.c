@@ -11,6 +11,8 @@ void destruct() {
 }
 
 #define INPUT_BUFFER_SIZE 2048
+char longestCommand[DIRECTORY_BUFFER_SIZE] = "";
+time_t longestTime = 0;
 
 int main() {
     initialize();
@@ -26,11 +28,22 @@ int main() {
 #ifdef DEBUG
         printf("[MAIN_DEBUG] Input recieved: %s\n", input);
 #endif
-
         Command buffer[MAX_COMMAND_PER_LINE];
         int commandCt = parseInput(buffer, MAX_COMMAND_PER_LINE, input);
         addEvent(buffer, commandCt, rawInput);
-        for (int i = 0; i < commandCt; i++) executeCommand(&buffer[i]);
+        strcpy(longestCommand, "");
+        longestTime = 0;
+        for (int i = 0; i < commandCt; i++) {
+            time_t startTime = time(NULL);
+            executeCommand(&buffer[i]);
+            time_t endTime = time(NULL);
+            time_t timeTaken = endTime - startTime;
+
+            if (buffer[i].argc && timeTaken > longestTime) {
+                longestTime = timeTaken;
+                strcpy(longestCommand, buffer[i].argv[0]);
+            }
+        }
         for (int i = 0; i < commandCt; i++) freeCommand(&buffer[i]);
     }
 

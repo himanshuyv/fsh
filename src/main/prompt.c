@@ -59,9 +59,15 @@ void prompt() {
 #endif
 
     // printf("<%s@%s:%s>", userName, sysName, currentDirectory);
-    colorPrintf(COLOR_BLUE, "<");
+    colorPrintf(COLOR_GREEN, "<");
     colorPrintf(USERNAME_COLOR, "%s", userName);
-    colorPrintf(COLOR_BLUE, "@");
+    colorPrintf(COLOR_GREEN, "@");
     colorPrintf(SYSNAME_COLOR, "%s", sysName);
-    colorPrintf(COLOR_BLUE, ":%s>", currentDirectory);
+    colorPrintf(COLOR_GREEN, ":%s", currentDirectory);
+
+    if (longestTime > 2) {
+        printf(" %s : %ld", longestCommand, longestTime);
+    } 
+
+    colorPrintf(COLOR_GREEN, ">");
 }
