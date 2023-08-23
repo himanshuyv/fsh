@@ -31,12 +31,10 @@
 #include "prompt.h"
 #include "util/colors.h"
 #include "util/command.h"
+#include "util/file_util.h"
 #include "util/history.h"
 #include "util/process.h"
 #include "util/queue.h"
 bool isNum(char* str);
 bool isBlank(char* str);
-void replaceHomeDirPrefix(char* path);
-bool isHomeDirPrefix(char* path);
-void replaceTildaWithHome(char* path);
 #endif

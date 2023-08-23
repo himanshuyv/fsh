@@ -1,13 +1,5 @@
 #include "../../header/headers.h"
 
-void replaceTildaWithHome(char* path) {
-    if (path[0] != '~') return;
-    char temp[DIRECTORY_BUFFER_SIZE] = {'\0'};
-    strcpy(temp, homeDirectory);
-    strcat(temp, path + 1);
-    strcpy(path, temp);
-}
-
 int changeDirectory(char* path) {
     int pathLength = strlen(path);
     int errorCode;

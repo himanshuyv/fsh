@@ -38,29 +38,6 @@ void getSysname(char* buffer) {
     }
 }
 
-bool isHomeDirPrefix(char* path) {
-    int homeDirectoryLength = strlen(homeDirectory);
-    int pathLength = strlen(path);
-    if (pathLength < homeDirectoryLength) return false;
-    for (int i = 0; i < homeDirectoryLength; i++) {
-        if (homeDirectory[i] != path[i]) return false;
-    }
-
-    return true;
-}
-
-void replaceHomeDirPrefix(char* path) {
-    if (!isHomeDirPrefix(path)) return;
-    int pathLength = strlen(path);
-    int homeDirectoryLength = strlen(homeDirectory);
-    for (int i = 1; i - 1 + homeDirectoryLength <= pathLength; i++) {
-        path[i] = path[i - 1 + homeDirectoryLength];
-    }
-
-    path[0] = '~';
-    path[pathLength - homeDirectoryLength + 1] = '\0';
-}
-
 void setCurrentDirectory() {
     if (getcwd(absolutePath, DIRECTORY_BUFFER_SIZE) == NULL) {
         // TODO Handle error

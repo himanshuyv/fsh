@@ -1,49 +1,15 @@
 #include "../../header/headers.h"
 
-/*
-
-green for executables, white for files and blue for directories
-
-*/
-
-void printFileName(struct dirent* file, struct stat fileStat) {
-    switch (file->d_type) {
-        case DT_REG:
-            char* color = COLOR_WHITE;
-            if (fileStat.st_mode & S_IXUSR) color = COLOR_GREEN;
-            colorPrintf(color, "%s ", file->d_name);
-            break;
-        case DT_DIR:
-            colorPrintf(COLOR_BLUE, "%s ", file->d_name);
-            break;
-        default:
-            colorPrintf(COLOR_RED, "%s* ", file->d_name);
-            break;
-    }
-}
-
 int peekHelperShort(char* prefix, struct dirent** dir, int fileCount, bool allFlag) {
     for (int i = 0; i < fileCount; i++) {
-        // printf("here\n");
         struct dirent* file = dir[i];
-        struct stat fileStat;
         if (!allFlag && file->d_name[0] == '.') continue;
-        char absFile[DIRECTORY_BUFFER_SIZE];
-        strcpy(absFile, prefix);
-        strcat(absFile, file->d_name);
-        int statErrorCode = stat(absFile, &fileStat);
-        if (statErrorCode == -1)
-            fprintf(stderr, "[ERROR]: Error calling stat on %s\n",
-                    file->d_name);
+        struct stat fileStat;
+        getStat(prefix, file->d_name, &fileStat);
         printFileName(file, fileStat);
     }
     printf("\n");
-
-    for (int i = 0; i < fileCount; i++) {
-        free(dir[i]);
-    }
-    free(dir);
-
+    freeDirent(dir, fileCount);
     return EXEC_SUCCESS;
 }
 
@@ -52,11 +18,9 @@ int makeFileLine(char* prefix, struct dirent* file) {
     char absPath[DIRECTORY_BUFFER_SIZE];
     strcpy(absPath, prefix);
     strcat(absPath, file->d_name);
-    int statErrorCode = stat(absPath, &fileStat);
-    if (statErrorCode == -1) {
-        fprintf(stderr, "[ERROR]: Error calling stat on %s\n", file->d_name);
+    if (getStat(prefix, file->d_name, &fileStat))
         return EXEC_FAILURE;
-    }
+    
     // File type
     char fileTypeChar = '-';
     switch (fileStat.st_mode & S_IFMT) {
@@ -132,15 +96,10 @@ int peekHelperLong(char* prefix, struct dirent** dir, int fileCount, bool allFla
         struct dirent* file = dir[i];
         if (!allFlag && file->d_name[0] == '.') continue;
         struct stat fileStat;
-        char absPath[DIRECTORY_BUFFER_SIZE];
-        strcpy(absPath, prefix);
-        strcat(absPath, file->d_name);
-        int statErrorCode = stat(absPath, &fileStat);
-        if (statErrorCode == -1) {
-            fprintf(stderr, "[ERROR]: Error calling stat on %s\n", file->d_name);
+        if (getStat(prefix, file->d_name, &fileStat))
             exitCode = 1;
-        } else
-            blockSum += fileStat.st_blocks;
+        else
+            blockSum = fileStat.st_blocks;
     }
 
     printf("total %d\n", blockSum);
@@ -151,10 +110,7 @@ int peekHelperLong(char* prefix, struct dirent** dir, int fileCount, bool allFla
         exitCode |= makeFileLine(prefix, file);
     }
 
-    for (int i = 0; i < fileCount; i++) {
-        free(dir[i]);
-    }
-    free(dir);
+    freeDirent(dir, fileCount);
 
     return exitCode;
 }

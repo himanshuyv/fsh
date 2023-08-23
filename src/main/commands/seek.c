@@ -15,16 +15,12 @@ int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, b
             continue;
         if (fileNameLength > 1 && file->d_name[0] == '.' && file->d_name[1] == '.' && file->d_name[2] == '\0')
             continue;
+
         struct stat fileStat;
         char absPath[DIRECTORY_BUFFER_SIZE];
-        strcpy(absPath, directory);
-        strcat(absPath, file->d_name);
-        int statErrorCode = stat(absPath, &fileStat);
-        if (statErrorCode == -1) {
-            fprintf(stderr, "[ERROR]: Error calling stat on %s\n", file->d_name);
-            exitCode = EXEC_FAILURE;
-        }
-
+        getAbsolutePath(directory, file->d_name, absPath);
+        exitCode = getStat(directory, file->d_name, &fileStat);
+        
         int directoryLength = strlen(directory);
         if (directory[directoryLength - 1] != '/') {
             strcat(directory, "/");
@@ -48,9 +44,7 @@ int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, b
         directory[directoryLength] = '\0';
     }
 
-    for (int i = 0; i < fileCount; i++) 
-        free(dir[i]);
-    free(dir);
+    freeDirent(dir, fileCount);
     return exitCode;
 }
 
@@ -138,21 +132,19 @@ int seek(Command* command) {
     char dirPath[DIRECTORY_BUFFER_SIZE];
     char target[DIRECTORY_BUFFER_SIZE];
     bool dirOnlyFlag = false, fileOnlyFlag = false, oneFlag = false;
-    if (setSeekFlags(command, target, dirPath, &dirOnlyFlag, &fileOnlyFlag, &oneFlag)) {
+    if (setSeekFlags(command, target, dirPath, &dirOnlyFlag, &fileOnlyFlag, &oneFlag))
         return EXEC_FAILURE;
-    }
 
     replaceTildaWithHome(dirPath);
     if (dirPath[strlen(dirPath) - 1] != '/')
         strcat(dirPath, "/");
     matchedFileCount = 0;
     exitCode = search(dirPath, target, dirOnlyFlag, fileOnlyFlag, oneFlag, strlen(dirPath));
-    if (matchedFileCount == 0) {
+    if (matchedFileCount == 0)
         printf("No match found!\n");
-    } else {
-        if (oneFlag && matchedFileCount == 1) {
+    else {
+        if (oneFlag && matchedFileCount == 1)
             handleOneFlag();
-        }
     }
     return exitCode;
 }
