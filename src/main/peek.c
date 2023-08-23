@@ -126,6 +126,25 @@ int makeFileLine(char* prefix, struct dirent* file) {
 
 int peekHelperLong(char* prefix, struct dirent** dir, int fileCount, bool allFlag) {
     int exitCode = 0;
+    // Block sum
+    int blockSum = 0;
+    for (int i = 0; i < fileCount; i++) {
+        struct dirent* file = dir[i];
+        if (!allFlag && file->d_name[0] == '.') continue;
+        struct stat fileStat;
+        char absPath[DIRECTORY_BUFFER_SIZE];
+        strcpy(absPath, prefix);
+        strcat(absPath, file->d_name);
+        int statErrorCode = stat(absPath, &fileStat);
+        if (statErrorCode == -1) {
+            fprintf(stderr, "[ERROR]: Error calling stat on %s\n", file->d_name);
+            exitCode = 1;
+        } else
+            blockSum += fileStat.st_blocks;
+    }
+
+    printf("total %d\n", blockSum);
+
     for (int i = 0; i < fileCount; i++) {
         struct dirent* file = dir[i];
         if (!allFlag && file->d_name[0] == '.') continue;
