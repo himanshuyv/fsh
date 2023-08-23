@@ -1,7 +1,7 @@
 #ifndef __WARP_H
 #define __WARP_H
 
-#include "../header/util/command.h"
+#include "../util/command.h"
 /*
     Changes directory to that specified by path.
     Empty string path and "~" change directory to home

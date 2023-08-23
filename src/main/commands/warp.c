@@ -1,4 +1,4 @@
-#include "../header/headers.h"
+#include "../../header/headers.h"
 
 void replaceTildaWithHome(char* path) {
     if (path[0] != '~') return;
