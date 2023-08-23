@@ -20,8 +20,6 @@
 #include <wait.h>
 #define MAX_COMMAND_PER_LINE 32
 
-#define DEBUG
-
 #include "executing.h"
 #include "parsing.h"
 #include "pastevents.h"
@@ -29,13 +27,13 @@
 #include "process_handling.h"
 #include "proclore.h"
 #include "prompt.h"
+#include "seek.h"
 #include "util/colors.h"
 #include "util/command.h"
 #include "util/history.h"
 #include "util/process.h"
 #include "util/queue.h"
 #include "warp.h"
-
 bool isNum(char* str);
 bool isBlank(char* str);
 void replaceHomeDirPrefix(char* path);

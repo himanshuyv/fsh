@@ -159,7 +159,7 @@ int peekHelperLong(char* prefix, struct dirent** dir, int fileCount, bool allFla
     return exitCode;
 }
 
-int setFlags(Command* command, bool* allFlagPtr, bool* longFlagPtr, char* dirPath) {
+int setPeekFlags(Command* command, bool* allFlagPtr, bool* longFlagPtr, char* dirPath) {
     strcpy(dirPath, ".");
     if (command->argc == 1) {
         *allFlagPtr = false;
@@ -193,11 +193,12 @@ int peek(Command* command) {
     char dirPath[DIRECTORY_BUFFER_SIZE];
     bool allFlag = 0, longFlag = 0;
 
-    if (setFlags(command, &allFlag, &longFlag, dirPath))
+    if (setPeekFlags(command, &allFlag, &longFlag, dirPath))
         return EXEC_FAILURE;
 
     replaceTildaWithHome(dirPath);
-    strcat(dirPath, "/");
+    if (dirPath[strlen(dirPath) - 1] != '/')
+        strcat(dirPath, "/");
     struct dirent** dir;
     int fileCount = scandir(dirPath, &dir, NULL, alphasort);
     if (fileCount < 0) {

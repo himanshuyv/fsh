@@ -75,7 +75,11 @@ int executeSys(Command* command) {
 
 int executePeek(Command* command) {
     int exitCode = peek(command);
+    return exitCode;
+}
 
+int executeSeek(Command* command) {
+    int exitCode = seek(command);
     return exitCode;
 }
 
@@ -96,6 +100,8 @@ int executeCommand(Command* command) {
         exitCode = executeProclore(command);
     else if (strcmp(commandName, "peek") == 0)
         exitCode = executePeek(command);
+    else if (strcmp(commandName, "seek") == 0)
+        exitCode = executeSeek(command);
     else
         exitCode = executeSys(command);
 
