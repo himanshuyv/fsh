@@ -61,7 +61,7 @@ int makeFileLine(char* prefix, struct dirent* file) {
     // Owner
     struct passwd* pw = getpwuid(fileStat.st_uid);
     if (pw == NULL) {
-        fprintf(stderr, "[ERROR]: Error in calling getpwuid() for user id \'%u\', errno = %d", fileStat.st_uid, errno);
+        fprintf(stderr, "[ERROR]: Error in calling getpwuid() for user id \'%u\', errno = %d\n", fileStat.st_uid, errno);
         return EXEC_FAILURE;
     }
     char* ownerName = pw->pw_name;
@@ -69,7 +69,7 @@ int makeFileLine(char* prefix, struct dirent* file) {
     // Group
     struct group* gr = getgrgid(fileStat.st_gid);
     if (gr == NULL) {
-        fprintf(stderr, "[ERROR]: Error in calling getgrgid() for group id \'%u\', errno = %d", fileStat.st_gid, errno);
+        fprintf(stderr, "[ERROR]: Error in calling getgrgid() for group id \'%u\', errno = %d\n", fileStat.st_gid, errno);
         return EXEC_FAILURE;
     }
     char* groupName = gr->gr_name;

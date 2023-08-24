@@ -88,24 +88,24 @@ int handleOneFlag() {
     int exitCode = 0;
     struct stat fileStat;
     if (stat(matchedFilePath, &fileStat) == -1) {
-        fprintf(stderr, "[ERROR]: Error calling stat on \'%s\'", matchedFilePath);
+        fprintf(stderr, "[ERROR]: Error calling stat on \'%s\'\n", matchedFilePath);
         return EXEC_FAILURE;
     } else {
         if ((fileStat.st_mode & S_IFMT) == S_IFDIR) {
             if (fileStat.st_mode & S_IXUSR) {
                 if (chdir(matchedFilePath)) {
-                    fprintf(stderr, "[ERROR]: Cannot chdir into \'%s\'", matchedFilePath);
+                    fprintf(stderr, "[ERROR]: Cannot chdir into \'%s\'\n", matchedFilePath);
                     return EXEC_FAILURE;
                 }
             } else {
-                fprintf(stderr, "[ERROR]: No execute permission for \'%s\'", matchedFilePath);
+                fprintf(stderr, "[ERROR]: No execute permission for \'%s\'\n", matchedFilePath);
                 return EXEC_FAILURE;
             }
         } else {
             if (fileStat.st_mode & S_IRUSR) {
                 FILE* matchedFile = fopen(matchedFilePath, "r");
                 if (matchedFile == NULL) {
-                    fprintf(stderr, "[ERROR]: Cannot chdir into \'%s\'", matchedFilePath);
+                    fprintf(stderr, "[ERROR]: Cannot chdir into \'%s\'\n", matchedFilePath);
                     return EXEC_FAILURE;
                 }
 
@@ -115,7 +115,7 @@ int handleOneFlag() {
                 }
                 fclose(matchedFile);
             } else {
-                fprintf(stderr, "[ERROR]: No read permission for \'%s\'", matchedFilePath);
+                fprintf(stderr, "[ERROR]: No read permission for \'%s\'\n", matchedFilePath);
                 return EXEC_FAILURE;
             }
         }

@@ -54,7 +54,7 @@ int executeSys(Command* command) {
     int exitCode = 0;
     pid_t pid = fork();
     if (pid == -1) {
-        fprintf(stderr, "[ERROR]: Unable to fork process, errno = %d", errno);
+        fprintf(stderr, "[ERROR]: Unable to fork process, errno = %d\n", errno);
         exitCode = 1;
     } else if (pid == 0) {
         if (execvp(command->argv[0], command->argv) == -1) {
