@@ -81,6 +81,11 @@ int setSeekFlags(Command* command, char* target, char* directory, bool* dirOnlyF
         return EXEC_FAILURE;
     }
 
+    if (*dirOnlyFlag && *fileOnlyFlag) {
+        fprintf(stderr, "[ERROR]: Command seek recieved both -d and -f flags\n");
+        return EXEC_FAILURE;
+    }
+
     return EXEC_SUCCESS;
 }
 

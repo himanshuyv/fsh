@@ -124,9 +124,15 @@ int setPeekFlags(Command* command, bool* allFlagPtr, bool* longFlagPtr, char* di
     }
 
     int aCt = 0, lCt = 0;
+    int nonFlagArgumentCt = 0;
     for (int i = 1; i < command->argc; i++) {
-        if (command->argv[i][0] != '-') strcpy(dirPath, command->argv[i]);
-        else {
+        if (command->argv[i][0] != '-') {
+            nonFlagArgumentCt++;
+            if (nonFlagArgumentCt > 1) {
+                fprintf(stderr, "[ERROR]: Too many non-flag arguments for peek\n");
+                return EXEC_FAILURE;
+            } else strcpy(dirPath, command->argv[i]);
+        } else {
             for (int j = 1; j < strlen(command->argv[i]); j++) {
                 if (command->argv[i][j] != 'a' && command->argv[i][j] != 'l') {
                     fprintf(stderr, "[ERROR]: Unknown option for peek \'%c\'\n", command->argv[i][j]);

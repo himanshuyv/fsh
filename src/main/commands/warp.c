@@ -1,24 +1,44 @@
 #include "../../header/headers.h"
 
 int changeDirectory(char* path) {
-    int pathLength = strlen(path);
+    char pathCpy[DIRECTORY_BUFFER_SIZE];    
+    strcpy(pathCpy, path);
+    int pathLength = strlen(pathCpy);
     int errorCode;
     if (pathLength == 0) {
         errorCode = chdir(homeDirectory);
-    } else if (path[0] == '~') {
-        replaceTildaWithHome(path);
-        errorCode = chdir(path);
+        if (errorCode == -1) {
+            fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", pathCpy);
+            return EXEC_FAILURE;
+        }
+    } else if (pathCpy[0] == '~') {
+        replaceTildaWithHome(pathCpy);
+        errorCode = chdir(pathCpy);
+        if (errorCode == -1) {
+            fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", pathCpy);
+            return EXEC_FAILURE;
+        }
     } else if (pathLength == 1) {
-        if (path[0] == '-') {
+        if (pathCpy[0] == '-') {
             if (strlen(previousDirectory) == 0) {
                 fprintf(stderr, "[ERROR]: OLD_PWD not set\n");
                 return 3;
             } else {
                 errorCode = chdir(previousDirectory);
             }
+        } else {
+            errorCode = chdir(pathCpy);
+            if (errorCode == -1) {
+                fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", pathCpy);
+                return EXEC_FAILURE;
+            }           
         }
-    } else {
+    } else {                    
         errorCode = chdir(path);
+        if (errorCode == -1) {
+            fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", path);
+            return EXEC_FAILURE;
+        }
     }
 
     if (errorCode == -1) {
@@ -28,19 +48,18 @@ int changeDirectory(char* path) {
         }
     } else if (errno == 0) {
         strcpy(previousDirectory, absolutePath);
-        getcwd(absolutePath, DIRECTORY_BUFFER_SIZE);
-        printf("%s\n", absolutePath);
+        if (getcwd(absolutePath, DIRECTORY_BUFFER_SIZE) == NULL) {
+            fprintf(stderr, "[ERROR]: Warp: Could not get current directory\n");
+            return EXEC_FAILURE;
+        } else {
+            printf("%s\n", absolutePath);
+        }
     }
 
     return 0;
 }
 
 int warp(Command* command) {
-    if (command->argc == 1 && strcmp(command->argv[0], "warp") != 0) {
-        fprintf(stderr, "[ERROR]: Warp command does not begin with \'warp\'\n");
-        return EXEC_FAILURE;
-    }
-
     int exitCode;
     if (command->argc == 1) {
         exitCode = changeDirectory("");

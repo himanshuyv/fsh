@@ -24,9 +24,16 @@ int executePastEvents(Command* command) {
         exitCode = 0;
     } else {
         if (strcmp(command->argv[1], "purge") == 0) {
-            exitCode = purge();
+            if (command->argc == 2) 
+                exitCode = purge();
+            else {
+                fprintf(stderr, "[ERROR]: Too many arguments for pastevents purge\n");
+            }
         } else if (strcmp(command->argv[1], "execute") == 0) {
             exitCode = pastEventsExecute(command);
+        } else {
+            fprintf(stderr, "[ERROR]: Unknown second argument for pastevents \'%s\'\n", command->argv[1]);
+            exitCode = 1;
         }
     }
 
@@ -41,10 +48,11 @@ int executeProclore(Command* command) {
         if (isNum(command->argv[1]))
             exitCode = proclore(atoi(command->argv[1]));
         else {
-            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n",
-                    command->argv[1]);
+            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n",command->argv[1]);
             exitCode = EXEC_FAILURE;
         }
+    } else {
+        fprintf(stderr, "[ERROR]: Too many arguments for proclore\n");
     }
 
     return exitCode;
