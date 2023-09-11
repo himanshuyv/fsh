@@ -97,5 +97,7 @@ int main() {
     addSpacesAround(" >>", ">>", buffer);
     assert(strcmp(buffer, "  >> ") == 0);
     
+    addSpacesAround(">>", "|", buffer);
+    assert(strcmp(buffer, ">>") == 0);
 }
 */
