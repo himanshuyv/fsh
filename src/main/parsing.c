@@ -1,7 +1,5 @@
 #include "../header/headers.h"
 
-#define COMMAND_STRING_BUFFER 1024
-
 void addSpacesAround(char* haystack, char* match, char* buffer) {
     int matchLength = strlen(match);
     if (matchLength == 0) {
@@ -47,9 +45,7 @@ int tokenize(Command* c, char* commandStr) {
     c->argc = argc;
     c->argv = (char**) malloc(sizeof(char*) * (argc + 1));
     for (int i = 0; i < argc; i++) {
-        // c->argv[i] = argv[i];
-        c->argv[i] = (char*) malloc(sizeof(char) * (strlen(argv[i]) + 1));
-        strcpy(c->argv[i], argv[i]);
+        c->argv[i] = argv[i];
     }
     c->argv[argc] = NULL;
 #ifdef DEBUG
