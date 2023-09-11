@@ -3,6 +3,7 @@
 
 #include "util/command.h"
 
+void addSpacesAround(char* haystack, char* match, char* buffer);
 int parseInput(Command* buffer, size_t bufferSize, char* input);
 
 #endif

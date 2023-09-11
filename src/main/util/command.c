@@ -1,6 +1,9 @@
 #include "../../header/headers.h"
 
 void freeCommand(Command* c) {
+    for (int i = 0; i < c->argc; i++) {
+        free(c->argv[i]);
+    }
     free(c->argv);
 }
 
