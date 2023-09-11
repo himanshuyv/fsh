@@ -1,5 +1,30 @@
 #include "../header/headers.h"
 
+void addSpacesAround(char* haystack, char* match, char* buffer) {
+    int matchLength = strlen(match);
+    if (matchLength == 0) {
+        strcpy(buffer, haystack);
+        return;
+    }
+
+    int bufferPtr = 0;
+    for (int i = 0; haystack[i] != '\0'; i++) {
+        char* firstOccurence = strstr(haystack + i, match);
+        if (firstOccurence == haystack + i) {
+            buffer[bufferPtr++] = ' ';
+            for (int j = 0; j < matchLength; j++) {
+                buffer[bufferPtr++] = match[j];
+            }
+            buffer[bufferPtr++] = ' ';
+            i += matchLength - 1;
+        } else {
+            buffer[bufferPtr++] = haystack[i];
+        }
+    }   
+
+    buffer[bufferPtr] = '\0';
+}
+
 const char* TOKEN_DELIMETERS = " \r\v\f\t\n";
 /*
     -1 return = empty command
@@ -52,3 +77,25 @@ int parseInput(Command* buffer, size_t bufferSize, char* input) {
 
     return commandCt;
 }
+
+// Tests
+/*
+int main() {
+    char buffer[1024] = {0};
+    addSpacesAround("abc>|hi hello", ">", buffer);
+    assert(strcmp(buffer, "abc > |hi hello") == 0);
+
+    addSpacesAround("abc > |hi", ">", buffer);
+    assert(strcmp(buffer, "abc  >  |hi") == 0);
+
+    addSpacesAround("abc>>hey", ">>", buffer);
+    assert(strcmp(buffer, "abc >> hey") == 0);
+
+    addSpacesAround(">>", ">>", buffer);
+    assert(strcmp(buffer, " >> ") == 0);
+
+    addSpacesAround(" >>", ">>", buffer);
+    assert(strcmp(buffer, "  >> ") == 0);
+    
+}
+*/
