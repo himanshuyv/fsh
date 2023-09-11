@@ -23,6 +23,11 @@ int main() {
         fgets(input, INPUT_BUFFER_SIZE, stdin);
         int len = strlen(input);
         input[len - 1] = '\0';
+        char spacedInput[INPUT_BUFFER_SIZE];
+        strcpy(spacedInput, input);
+        addSpacesAround(spacedInput, "|", "", input);
+        addSpacesAround(input, ">", ">>", spacedInput);
+        addSpacesAround(spacedInput, "<", "", input);
         char rawInput[INPUT_BUFFER_SIZE];
         strcpy(rawInput, input);
 #ifdef DEBUG
