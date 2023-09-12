@@ -9,15 +9,18 @@ int executePastEvents(Subcommand command) {
         exitCode = 0;
     } else {
         if (strcmp(command->argv[1], "purge") == 0) {
-            if (command->argc == 2) 
+            if (command->argc == 2)
                 exitCode = purge();
             else {
-                fprintf(stderr, "[ERROR]: Too many arguments for pastevents purge\n");
+                fprintf(stderr,
+                        "[ERROR]: Too many arguments for pastevents purge\n");
             }
         } else if (strcmp(command->argv[1], "execute") == 0) {
             exitCode = pastEventsExecute(command);
         } else {
-            fprintf(stderr, "[ERROR]: Unknown second argument for pastevents \'%s\'\n", command->argv[1]);
+            fprintf(stderr,
+                    "[ERROR]: Unknown second argument for pastevents \'%s\'\n",
+                    command->argv[1]);
             exitCode = 1;
         }
     }
@@ -33,7 +36,8 @@ int executeProclore(Subcommand command) {
         if (isNum(command->argv[1]))
             exitCode = proclore(atoi(command->argv[1]));
         else {
-            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n",command->argv[1]);
+            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n",
+                    command->argv[1]);
             exitCode = EXEC_FAILURE;
         }
     } else {
@@ -50,17 +54,35 @@ int executeSys(Subcommand command) {
         fprintf(stderr, "[ERROR]: Unable to fork process, errno = %d\n", errno);
         exitCode = 1;
     } else if (pid == 0) {
+        setpgid(0, 0);
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTSTP, SIG_DFL);
         if (execvp(command->argv[0], command->argv) == -1) {
-            fprintf(stderr, "[ERROR]: Bad shell command \'%s\'\n", command->argv[0]);
-            exitCode = 1;
+            fprintf(stderr, "[ERROR]: Bad shell command \'%s\'\n",
+                    command->argv[0]);
+            exit(1);
         }
     } else {
         int status;
         if (command->isBackground) {
             printf("%d\n", pid);
             exitCode = addProcess(command->argv[0], pid);
-        } else
-            waitpid(pid, &status, 0);
+        } else {
+            setpgid(pid, 0);
+            signal(SIGTTIN, SIG_IGN);
+            signal(SIGTTOU, SIG_IGN);
+            tcsetpgrp(STDIN_FILENO, pid);
+
+            waitpid(pid, &status, WUNTRACED);
+            if (WIFSTOPPED(status)) {
+                printf("sent %i to bg\n", pid);
+                exitCode = addProcess(command->argv[0], pid);
+            }
+
+            tcsetpgrp(STDIN_FILENO, getpgid(0));
+            signal(SIGTTIN, SIG_DFL);
+            signal(SIGTTOU, SIG_DFL);
+        }
     }
 
     return exitCode;
@@ -123,7 +145,7 @@ int executeCommand(Command* command) {
     initStandardIO();
     SubcommandNode itr = subcommandList->front;
     int fd[2];
-    int previousOutputCurrentInput = 0; // current input / previous output
+    int previousOutputCurrentInput = 0;  // current input / previous output
     for (int i = 0; i < subcommandList->listSize; i++, itr = itr->next) {
         if (pipe(fd) == -1) {
             fprintf(stderr, "[ERROR]: Could not create pipe\n");
@@ -140,7 +162,7 @@ int executeCommand(Command* command) {
         } else {
             dup2(fd[1], 1);
         }
-        
+
         if (itr->subcommand->outputFd != -1) {
             dup2(itr->subcommand->outputFd, 1);
         }

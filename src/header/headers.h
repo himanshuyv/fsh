@@ -8,6 +8,7 @@
 #include <getopt.h>
 #include <grp.h>
 #include <pwd.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -33,6 +34,7 @@
 #include "process_handling.h"
 #include "prompt.h"
 #include "rawmode.h"
+#include "signal_handler.h"
 #include "util/colors.h"
 #include "util/command.h"
 #include "util/file_util.h"
@@ -45,4 +47,5 @@ extern char longestCommand[DIRECTORY_BUFFER_SIZE];
 extern time_t longestTime;
 extern int STDIN_FD;
 extern int STDOUT_FD;
+extern bool commandIsRunning;
 #endif

@@ -4,6 +4,7 @@ void initialize() {
     initPrompt();
     initHistory();
     initStandardIO();
+    initSignalHandlers();
 }
 
 void destruct() { 
@@ -13,16 +14,18 @@ void destruct() {
 
 char longestCommand[DIRECTORY_BUFFER_SIZE] = "";
 time_t longestTime = 0;
-
+bool commandIsRunning = false;
 int main() {
     initialize();
     while (1) {
         printFinishedProcesses();
+        commandIsRunning = false;
         prompt();
         // fgets(input, INPUT_BUFFER_SIZE, stdin);
         readInput();
         // int len = strlen(input);
         // input[len - 1] = '\0';
+        commandIsRunning = true;
         char spacedInput[INPUT_BUFFER_SIZE];
         addSpacesAround(input, "|", "", spacedInput);
         addSpacesAround(spacedInput, ">", ">>", input);

@@ -40,14 +40,14 @@ void enableRawMode() {
 */
 
 char input[INPUT_BUFFER_SIZE];
-
+int pt = 0;
 void readInput() {
     setbuf(stdout, NULL);
     enableRawMode();
     input[0] = '\0';
+    pt = 0;
     char c;
     // printf("Prompt>");
-    int pt = 0;
     while (read(STDIN_FILENO, &c, 1) == 1) {
         if (iscntrl(c)) {
             if (c == 10) {
