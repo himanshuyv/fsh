@@ -115,7 +115,7 @@ int peekHelperLong(char* prefix, struct dirent** dir, int fileCount, bool allFla
     return exitCode;
 }
 
-int setPeekFlags(Command* command, bool* allFlagPtr, bool* longFlagPtr, char* dirPath) {
+int setPeekFlags(Subcommand command, bool* allFlagPtr, bool* longFlagPtr, char* dirPath) {
     strcpy(dirPath, ".");
     if (command->argc == 1) {
         *allFlagPtr = false;
@@ -150,7 +150,7 @@ int setPeekFlags(Command* command, bool* allFlagPtr, bool* longFlagPtr, char* di
     return EXEC_SUCCESS;
 }
 
-int peek(Command* command) {
+int peek(Subcommand command) {
     int exitCode = 0;
     char dirPath[DIRECTORY_BUFFER_SIZE];
     bool allFlag = 0, longFlag = 0;

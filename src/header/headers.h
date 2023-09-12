@@ -35,9 +35,10 @@
 #include "util/history.h"
 #include "util/process.h"
 #include "util/queue.h"
-bool isNum(char* str);
-bool isBlank(char* str);
-
+#include "util/string_util.h"
+#include "util/subcommand.h"
 extern char longestCommand[DIRECTORY_BUFFER_SIZE];
 extern time_t longestTime;
+extern int STDIN_FD;
+extern int STDOUT_FD;
 #endif

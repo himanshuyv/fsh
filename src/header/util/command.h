@@ -5,8 +5,8 @@
 #define COMMAND_MAX_ARGC 128
 
 typedef struct Command {
-    size_t argc;
-    char** argv;
+        size_t argc;
+        char** argv;
     bool isBackground;
 } Command;
 

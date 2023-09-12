@@ -1,8 +1,8 @@
 #ifndef __PEEK_H
 #define __PEEK_H
 
-#include "../util/command.h"
+#include "../util/subcommand.h"
 
-int peek(Command* command);
+int peek(Subcommand command);
 
 #endif

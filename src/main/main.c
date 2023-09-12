@@ -3,6 +3,7 @@
 void initialize() {
     initPrompt();
     initHistory();
+    initStandardIO();
 }
 
 void destruct() { 
@@ -24,10 +25,10 @@ int main() {
         int len = strlen(input);
         input[len - 1] = '\0';
         char spacedInput[INPUT_BUFFER_SIZE];
-        strcpy(spacedInput, input);
-        addSpacesAround(spacedInput, "|", "", input);
-        addSpacesAround(input, ">", ">>", spacedInput);
-        addSpacesAround(spacedInput, "<", "", input);
+        addSpacesAround(input, "|", "", spacedInput);
+        addSpacesAround(spacedInput, ">", ">>", input);
+        addSpacesAround(input, "<", "", spacedInput);
+        addSpacesAround(spacedInput, ">>", "", input);
         char rawInput[INPUT_BUFFER_SIZE];
         strcpy(rawInput, input);
 #ifdef DEBUG

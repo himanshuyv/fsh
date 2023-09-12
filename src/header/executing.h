@@ -7,5 +7,5 @@
 #define EXEC_FAILURE 1
 
 int executeCommand(Command* command);
-
+void initStandardIO();
 #endif

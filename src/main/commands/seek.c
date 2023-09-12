@@ -45,7 +45,7 @@ int search(char* directory, char* target, bool dirOnlyFlag, bool fileOnlyFlag, b
     return exitCode;
 }
 
-int setSeekFlags(Command* command, char* target, char* directory, bool* dirOnlyFlag, bool* fileOnlyFlag, bool* oneFlag) {
+int setSeekFlags(Subcommand command, char* target, char* directory, bool* dirOnlyFlag, bool* fileOnlyFlag, bool* oneFlag) {
     if (command->argc == 1) return EXEC_FAILURE;
     strcpy(directory, ".");
     int nonFlagArguments = 0;
@@ -129,7 +129,7 @@ int handleOneFlag() {
     return exitCode;
 }
 
-int seek(Command* command) {
+int seek(Subcommand command) {
     int exitCode = 0;
     char dirPath[DIRECTORY_BUFFER_SIZE];
     char target[DIRECTORY_BUFFER_SIZE];

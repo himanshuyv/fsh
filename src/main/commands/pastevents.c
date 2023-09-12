@@ -12,7 +12,7 @@ int purge() {
     return EXEC_FAILURE;
 }
 
-int pastEventsExecute(Command* command) {
+int pastEventsExecute(Subcommand command) {
     if (command->argc != 3) {
         fprintf(stderr, "[ERROR]: Invalid number of arguments for pastevents execute: %ld\n", command->argc);
         return EXEC_FAILURE;

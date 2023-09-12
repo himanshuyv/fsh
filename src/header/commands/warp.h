@@ -1,7 +1,7 @@
 #ifndef __WARP_H
 #define __WARP_H
 
-#include "../util/command.h"
+#include "../util/subcommand.h"
 /*
     Changes directory to that specified by path.
     Empty string path and "~" change directory to home
@@ -15,6 +15,6 @@ int changeDirectory(char* path);
 /*
     Returns 0 on success, 1 otherwise
 */
-int warp(Command* command);
+int warp(Subcommand command);
 
 #endif

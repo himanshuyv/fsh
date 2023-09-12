@@ -59,7 +59,7 @@ int changeDirectory(char* path) {
     return 0;
 }
 
-int warp(Command* command) {
+int warp(Subcommand command) {
     int exitCode;
     if (command->argc == 1) {
         exitCode = changeDirectory("");

@@ -1,21 +1,6 @@
 #include "../header/headers.h"
 
-bool isNum(char* str) {
-    if (str[0] == '\0') return false;
-    for (int i = 0; str[i] != '\0'; i++)
-        if (!isdigit(str[i])) return false;
-    
-    return true;
-}
-
-bool isBlank(char* str) {
-    for (int i = 0; str[i] != '\0'; i++)
-        if (!isspace(str[i])) return false;
-    
-    return true;
-}
-
-int executePastEvents(Command* command) {
+int executePastEvents(Subcommand command) {
     int exitCode;
     if (command->argc == 1) {
         for (Node itr = eventQueue->front; itr != NULL; itr = itr->next) {
@@ -40,7 +25,7 @@ int executePastEvents(Command* command) {
     return exitCode > 0;
 }
 
-int executeProclore(Command* command) {
+int executeProclore(Subcommand command) {
     int exitCode = 0;
     if (command->argc == 1)
         exitCode = proclore(getpid());
@@ -58,7 +43,7 @@ int executeProclore(Command* command) {
     return exitCode;
 }
 
-int executeSys(Command* command) {
+int executeSys(Subcommand command) {
     int exitCode = 0;
     pid_t pid = fork();
     if (pid == -1) {
@@ -81,17 +66,17 @@ int executeSys(Command* command) {
     return exitCode;
 }
 
-int executePeek(Command* command) {
+int executePeek(Subcommand command) {
     int exitCode = peek(command);
     return exitCode;
 }
 
-int executeSeek(Command* command) {
+int executeSeek(Subcommand command) {
     int exitCode = seek(command);
     return exitCode;
 }
 
-int executeCommand(Command* command) {
+int executeSubcommand(Subcommand command) {
     if (command->argc == 0) {
         fprintf(stderr, "[ERROR]: Command has length 0\n");
         return EXEC_FAILURE;
@@ -114,4 +99,60 @@ int executeCommand(Command* command) {
         exitCode = executeSys(command);
 
     return exitCode;
+}
+
+void initStandardIO() {
+    STDIN_FD = dup(0);
+    STDOUT_FD = dup(1);
+}
+
+int STDIN_FD;
+int STDOUT_FD;
+void restoreStandardIO() {
+    dup2(STDIN_FD, 0);
+    dup2(STDOUT_FD, 1);
+    close(STDIN_FD);
+    close(STDOUT_FD);
+}
+
+int executeCommand(Command* command) {
+    SubcommandList subcommandList = parseSubcommands(command);
+    if (subcommandList == NULL) return EXEC_FAILURE;
+    initStandardIO();
+    SubcommandNode itr = subcommandList->front;
+    int fd[2];
+    int previousOutputCurrentInput = 0; // current input / previous output
+    for (int i = 0; i < subcommandList->listSize; i++, itr = itr->next) {
+        if (pipe(fd) == -1) {
+            fprintf(stderr, "[ERROR]: Could not create pipe\n");
+            return EXEC_FAILURE;
+        }
+
+        dup2(previousOutputCurrentInput, 0);
+        if (itr->subcommand->inputFd != -1) {
+            dup2(itr->subcommand->inputFd, 0);
+        }
+
+        if (i == subcommandList->listSize - 1) {
+            dup2(STDOUT_FD, 1);
+        } else {
+            dup2(fd[1], 1);
+        }
+        
+        if (itr->subcommand->outputFd != -1) {
+            dup2(itr->subcommand->outputFd, 1);
+        }
+
+        if (executeSubcommand(itr->subcommand)) {
+            restoreStandardIO();
+            freeSubcommandList(subcommandList);
+            return EXEC_FAILURE;
+        }
+
+        close(fd[1]);
+        previousOutputCurrentInput = fd[0];
+    }
+    freeSubcommandList(subcommandList);
+    restoreStandardIO();
+    return EXEC_SUCCESS;
 }

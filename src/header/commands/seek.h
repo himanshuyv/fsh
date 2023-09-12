@@ -1,8 +1,8 @@
 #ifndef __SEEK_H
 #define __SEEK_H
 
-#include "../util/command.h"
+#include "../util/subcommand.h"
 
-int seek(Command* command);
+int seek(Subcommand command);
 
 #endif
