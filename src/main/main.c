@@ -11,7 +11,6 @@ void destruct() {
     destructBackground();
 }
 
-#define INPUT_BUFFER_SIZE 2048
 char longestCommand[DIRECTORY_BUFFER_SIZE] = "";
 time_t longestTime = 0;
 
@@ -20,10 +19,10 @@ int main() {
     while (1) {
         printFinishedProcesses();
         prompt();
-        char input[INPUT_BUFFER_SIZE];
-        fgets(input, INPUT_BUFFER_SIZE, stdin);
-        int len = strlen(input);
-        input[len - 1] = '\0';
+        // fgets(input, INPUT_BUFFER_SIZE, stdin);
+        readInput();
+        // int len = strlen(input);
+        // input[len - 1] = '\0';
         char spacedInput[INPUT_BUFFER_SIZE];
         addSpacesAround(input, "|", "", spacedInput);
         addSpacesAround(spacedInput, ">", ">>", input);

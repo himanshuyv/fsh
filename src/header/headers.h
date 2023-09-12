@@ -15,6 +15,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <termios.h>
 #include <time.h>
 #include <unistd.h>
 #include <wait.h>
@@ -29,6 +30,7 @@
 #include "parsing.h"
 #include "process_handling.h"
 #include "prompt.h"
+#include "rawmode.h"
 #include "util/colors.h"
 #include "util/command.h"
 #include "util/file_util.h"
