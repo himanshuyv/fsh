@@ -20,9 +20,11 @@
 #include <unistd.h>
 #include <wait.h>
 #define MAX_COMMAND_PER_LINE 32
+#define RADIX 10
 
 #include "commands/pastevents.h"
 #include "commands/peek.h"
+#include "commands/ping.h"
 #include "commands/proclore.h"
 #include "commands/seek.h"
 #include "commands/warp.h"

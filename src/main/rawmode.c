@@ -78,6 +78,7 @@ void readInput() {
             printf("%c", c);
         }
     }
+    input[pt++] = '\0';
     disableRawMode();
 #ifdef DEBUG
     printf("\nInput Read: [%s]\n", input);

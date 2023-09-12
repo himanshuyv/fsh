@@ -95,6 +95,8 @@ int executeSubcommand(Subcommand command) {
         exitCode = executePeek(command);
     else if (strcmp(commandName, "seek") == 0)
         exitCode = executeSeek(command);
+    else if (strcmp(commandName, "ping") == 0)
+        exitCode = ping(command);
     else
         exitCode = executeSys(command);
 

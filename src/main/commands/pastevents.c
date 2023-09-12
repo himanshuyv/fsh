@@ -1,7 +1,5 @@
 #include "../../header/headers.h"
 
-#define RADIX 10
-
 int purge() {
     int queueSize = getHistorySize();
     for (int i = 0; i < queueSize; i++) {
