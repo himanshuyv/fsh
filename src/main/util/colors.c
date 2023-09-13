@@ -11,12 +11,10 @@ void colorPrintf(char* color, char* format, ...) {
 char* ERROR_PREFIX = "[ERROR]: ";
 
 void errorPrintf(char* format, ...) {
-    // colorPrintf(COLOR_RED, ERROR_PREFIX);
-    // colorPrintf(COLOR_RED, format, arguments);
-    printf(COLOR_RED);
+    fprintf(stderr, COLOR_RED);
     va_list arguments;
     va_start(arguments, format);
-    printf(ERROR_PREFIX);
-    vprintf(format, arguments);
-    printf(COLOR_RESET);
+    fprintf(stderr, ERROR_PREFIX);
+    vfprintf(stderr, format, arguments);
+    fprintf(stderr, COLOR_RESET);
 }

@@ -7,6 +7,8 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <grp.h>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <pwd.h>
 #include <signal.h>
 #include <stdarg.h>
@@ -14,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <termios.h>
@@ -26,6 +29,7 @@
 #include "commands/activities.h"
 #include "commands/bg.h"
 #include "commands/fg.h"
+#include "commands/iman.h"
 #include "commands/neonate.h"
 #include "commands/pastevents.h"
 #include "commands/peek.h"

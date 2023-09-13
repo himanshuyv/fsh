@@ -125,6 +125,8 @@ int executeSubcommand(Subcommand command) {
         exitCode = activities(command);
     else if (strcmp(commandName, "neonate") == 0)
         exitCode = neonate(command);
+    else if (strcmp(commandName, "iman") == 0)
+        exitCode = iman(command);
     else
         exitCode = executeSys(command);
 

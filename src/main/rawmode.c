@@ -1,15 +1,12 @@
 #include "../header/headers.h"
 
-void die(const char *s) {
-    perror(s);
-    exit(1);
-}
-
 struct termios orig_termios;
 
 void disableRawMode() {
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
-        die("tcsetattr");
+    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1) {
+        errorPrintf("tcsetarr\n");
+    }
+        // die("tcsetattr");
 }
 
 /**
@@ -21,11 +18,18 @@ void disableRawMode() {
  * The c_lflag field is for “local flags”
 */
 void enableRawMode() {
-    if (tcgetattr(STDIN_FILENO, &orig_termios) == -1) die("tcgetattr");
+    if (tcgetattr(STDIN_FILENO, &orig_termios) == -1) {
+        // die("tcgetattr");
+        errorPrintf("tcgetattr\n");
+        return;
+    }
     atexit(disableRawMode);
     struct termios raw = orig_termios;
     raw.c_lflag &= ~(ICANON | ECHO);
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcsetattr");
+    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) {
+        // die("tcsetattr");
+        errorPrintf("tcsetattr\n");
+    }
 }
 
 /**

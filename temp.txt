@@ -1,0 +1,1 @@
+[37;1mREADME.md [0m[32;1ma.out [0m[37;1mmakefile [0m[34;1msrc [0m[37;1mtemp.txt [0m[37;1mtest.c [0m[37;1mtest.txt [0m
