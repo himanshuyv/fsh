@@ -26,6 +26,7 @@
 #include "commands/activities.h"
 #include "commands/bg.h"
 #include "commands/fg.h"
+#include "commands/neonate.h"
 #include "commands/pastevents.h"
 #include "commands/peek.h"
 #include "commands/ping.h"

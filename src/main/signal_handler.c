@@ -15,4 +15,10 @@ void initSignalHandlers() {
     act.sa_flags = SA_RESTART;
     act.sa_handler = handleCtrlC;
     sigaction(SIGINT, &act, NULL);
+
+    // stuct sigaction thing;
+    // thing.sa_flags = SA_RESTART;
+    // thing.sa_handler = printRecentPID;
+    // sigaction(SIGALRM, &thing, NULL);r
+    signal(SIGALRM, printRecentPID);
 }
