@@ -61,7 +61,7 @@ int makeFileLine(char* prefix, struct dirent* file) {
     // Owner
     struct passwd* pw = getpwuid(fileStat.st_uid);
     if (pw == NULL) {
-        fprintf(stderr, "[ERROR]: Error in calling getpwuid() for user id \'%u\', errno = %d\n", fileStat.st_uid, errno);
+        errorPrintf("Error in calling getpwuid() for user id \'%u\', errno = %d\n", fileStat.st_uid, errno);
         return EXEC_FAILURE;
     }
     char* ownerName = pw->pw_name;
@@ -69,7 +69,7 @@ int makeFileLine(char* prefix, struct dirent* file) {
     // Group
     struct group* gr = getgrgid(fileStat.st_gid);
     if (gr == NULL) {
-        fprintf(stderr, "[ERROR]: Error in calling getgrgid() for group id \'%u\', errno = %d\n", fileStat.st_gid, errno);
+        errorPrintf("Error in calling getgrgid() for group id \'%u\', errno = %d\n", fileStat.st_gid, errno);
         return EXEC_FAILURE;
     }
     char* groupName = gr->gr_name;
@@ -129,13 +129,13 @@ int setPeekFlags(Subcommand command, bool* allFlagPtr, bool* longFlagPtr, char* 
         if (command->argv[i][0] != '-') {
             nonFlagArgumentCt++;
             if (nonFlagArgumentCt > 1) {
-                fprintf(stderr, "[ERROR]: Too many non-flag arguments for peek\n");
+                errorPrintf("Too many non-flag arguments for peek\n");
                 return EXEC_FAILURE;
             } else strcpy(dirPath, command->argv[i]);
         } else {
             for (int j = 1; j < strlen(command->argv[i]); j++) {
                 if (command->argv[i][j] != 'a' && command->argv[i][j] != 'l') {
-                    fprintf(stderr, "[ERROR]: Unknown option for peek \'%c\'\n", command->argv[i][j]);
+                    errorPrintf("Unknown option for peek \'%c\'\n", command->argv[i][j]);
                     return EXEC_FAILURE;
                 }
 
@@ -164,7 +164,7 @@ int peek(Subcommand command) {
     struct dirent** dir;
     int fileCount = scandir(dirPath, &dir, NULL, alphasort);
     if (fileCount < 0) {
-        fprintf(stderr, "[ERROR]: Cannot scandir \'%s\'\n", dirPath);
+        errorPrintf("Cannot scandir \'%s\'\n", dirPath);
         return EXEC_FAILURE;
     }
 

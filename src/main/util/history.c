@@ -36,7 +36,7 @@ void writeHistory() {
 
     historyFile = fopen(historyFilePath, "wb");
     if (historyFile == NULL) {
-        fprintf(stderr, "[ERROR]: Unable to write history file\n");
+        errorPrintf("Unable to write history file\n");
     } else {
         size_t queueSize = eventQueue->size;
         Node itr = eventQueue->front;
@@ -96,7 +96,7 @@ bool addEvent(Command* commands, int commandCt, char* inputString) {
 
 char* getKthLastEvent(int k) {
     if (eventQueue->size < k) {
-        fprintf(stderr, "[ERROR]: eventHistory size is only %ld\n",
+        errorPrintf("eventHistory size is only %ld\n",
                 eventQueue->size);
         return NULL;
     }

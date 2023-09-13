@@ -57,14 +57,14 @@ int setSeekFlags(Subcommand command, char* target, char* directory, bool* dirOnl
                     case 'e': *oneFlag = true; break;
                     case 'f': *fileOnlyFlag = true; break;
                     default:
-                        fprintf(stderr, "[ERROR]: Unknown option for seek \'%c\'\n", command->argv[i][j]);
+                        errorPrintf("Unknown option for seek \'%c\'\n", command->argv[i][j]);
                         return EXEC_FAILURE;
                 }
             }
         } else {
             nonFlagArguments++;
             if (nonFlagArguments > 2) {
-                fprintf(stderr, "[ERROR]: Too many arguments for seek\n");
+                errorPrintf("Too many arguments for seek\n");
                 return EXIT_FAILURE;
             }
 
@@ -77,12 +77,12 @@ int setSeekFlags(Subcommand command, char* target, char* directory, bool* dirOnl
     }
 
     if (nonFlagArguments == 0) {
-        fprintf(stderr, "[ERROR]: No target found to search\n");
+        errorPrintf("No target found to search\n");
         return EXEC_FAILURE;
     }
 
     if (*dirOnlyFlag && *fileOnlyFlag) {
-        fprintf(stderr, "[ERROR]: Command seek recieved both -d and -f flags\n");
+        errorPrintf("Command seek recieved both -d and -f flags\n");
         return EXEC_FAILURE;
     }
 
@@ -93,24 +93,24 @@ int handleOneFlag() {
     int exitCode = 0;
     struct stat fileStat;
     if (stat(matchedFilePath, &fileStat) == -1) {
-        fprintf(stderr, "[ERROR]: Error calling stat on \'%s\'\n", matchedFilePath);
+        errorPrintf("Error calling stat on \'%s\'\n", matchedFilePath);
         return EXEC_FAILURE;
     } else {
         if ((fileStat.st_mode & S_IFMT) == S_IFDIR) {
             if (fileStat.st_mode & S_IXUSR) {
                 if (chdir(matchedFilePath)) {
-                    fprintf(stderr, "[ERROR]: Cannot chdir into \'%s\'\n", matchedFilePath);
+                    errorPrintf("Cannot chdir into \'%s\'\n", matchedFilePath);
                     return EXEC_FAILURE;
                 }
             } else {
-                fprintf(stderr, "[ERROR]: No execute permission for \'%s\'\n", matchedFilePath);
+                errorPrintf("No execute permission for \'%s\'\n", matchedFilePath);
                 return EXEC_FAILURE;
             }
         } else {
             if (fileStat.st_mode & S_IRUSR) {
                 FILE* matchedFile = fopen(matchedFilePath, "r");
                 if (matchedFile == NULL) {
-                    fprintf(stderr, "[ERROR]: Cannot chdir into \'%s\'\n", matchedFilePath);
+                    errorPrintf("Cannot chdir into \'%s\'\n", matchedFilePath);
                     return EXEC_FAILURE;
                 }
 
@@ -120,7 +120,7 @@ int handleOneFlag() {
                 }
                 fclose(matchedFile);
             } else {
-                fprintf(stderr, "[ERROR]: No read permission for \'%s\'\n", matchedFilePath);
+                errorPrintf("No read permission for \'%s\'\n", matchedFilePath);
                 return EXEC_FAILURE;
             }
         }

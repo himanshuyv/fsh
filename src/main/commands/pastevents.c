@@ -12,12 +12,12 @@ int purge() {
 
 int pastEventsExecute(Subcommand command) {
     if (command->argc != 3) {
-        fprintf(stderr, "[ERROR]: Invalid number of arguments for pastevents execute: %ld\n", command->argc);
+        errorPrintf("Invalid number of arguments for pastevents execute: %ld\n", command->argc);
         return EXEC_FAILURE;
     } 
 
     if (!isNum(command->argv[2])) {
-        fprintf(stderr, "[ERROR]: pastevents execute: expected index, found: \'%s\'\n", command->argv[2]);
+        errorPrintf("pastevents execute: expected index, found: \'%s\'\n", command->argv[2]);
         return EXEC_FAILURE;
     }
  
@@ -25,7 +25,7 @@ int pastEventsExecute(Subcommand command) {
     int k = (int) strtoll(command->argv[2], &endPointer, RADIX);
 
     if (k > getHistorySize() || k <= 0) {
-        fprintf(stderr, "[ERROR]: Index out of bound, index = %d, historySize = %ld\n", k, getHistorySize());
+        errorPrintf("Index out of bound, index = %d, historySize = %ld\n", k, getHistorySize());
         return EXEC_FAILURE;
     }
     

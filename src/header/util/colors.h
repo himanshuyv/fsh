@@ -19,5 +19,5 @@
 #define USERNAME_COLOR COLOR_GREEN
 #define SYSNAME_COLOR COLOR_WHITE
 void colorPrintf(char* color, char* format, ...);
-
+void errorPrintf(char* format, ...);
 #endif

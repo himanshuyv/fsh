@@ -36,12 +36,11 @@ int executeProclore(Subcommand command) {
         if (isNum(command->argv[1]))
             exitCode = proclore(atoi(command->argv[1]));
         else {
-            fprintf(stderr, "[ERROR]: Expected PID, found: %s\n",
-                    command->argv[1]);
+            errorPrintf("Expected PID, found: %s\n", command->argv[1]);
             exitCode = EXEC_FAILURE;
         }
     } else {
-        fprintf(stderr, "[ERROR]: Too many arguments for proclore\n");
+        errorPrintf("Too many arguments for proclore\n");
     }
 
     return exitCode;
@@ -51,15 +50,14 @@ int executeSys(Subcommand command) {
     int exitCode = 0;
     pid_t pid = fork();
     if (pid == -1) {
-        fprintf(stderr, "[ERROR]: Unable to fork process, errno = %d\n", errno);
+        errorPrintf("Unable to fork process, errno = %d\n", errno);
         exitCode = 1;
     } else if (pid == 0) {
         setpgid(0, 0);
         signal(SIGINT, SIG_DFL);
         signal(SIGTSTP, SIG_DFL);
         if (execvp(command->argv[0], command->argv) == -1) {
-            fprintf(stderr, "[ERROR]: Bad shell command \'%s\'\n",
-                    command->argv[0]);
+            errorPrintf("Bad shell command \'%s\'\n", command->argv[0]);
             exit(1);
         }
     } else {
@@ -100,7 +98,7 @@ int executeSeek(Subcommand command) {
 
 int executeSubcommand(Subcommand command) {
     if (command->argc == 0) {
-        fprintf(stderr, "[ERROR]: Command has length 0\n");
+        errorPrintf("Command has length 0\n");
         return EXEC_FAILURE;
     }
 
@@ -156,7 +154,7 @@ int executeCommand(Command* command) {
     int previousOutputCurrentInput = 0;  // current input / previous output
     for (int i = 0; i < subcommandList->listSize; i++, itr = itr->next) {
         if (pipe(fd) == -1) {
-            fprintf(stderr, "[ERROR]: Could not create pipe\n");
+            errorPrintf("Could not create pipe\n");
             return EXEC_FAILURE;
         }
 

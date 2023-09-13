@@ -8,20 +8,20 @@ int changeDirectory(char* path) {
     if (pathLength == 0) {
         errorCode = chdir(homeDirectory);
         if (errorCode == -1) {
-            fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", pathCpy);
+            errorPrintf("Could not warp to \'%s\'\n", pathCpy);
             return EXEC_FAILURE;
         }
     } else if (pathCpy[0] == '~') {
         replaceTildaWithHome(pathCpy);
         errorCode = chdir(pathCpy);
         if (errorCode == -1) {
-            fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", pathCpy);
+            errorPrintf("Could not warp to \'%s\'\n", pathCpy);
             return EXEC_FAILURE;
         }
     } else if (pathLength == 1) {
         if (pathCpy[0] == '-') {
             if (strlen(previousDirectory) == 0) {
-                fprintf(stderr, "[ERROR]: OLD_PWD not set\n");
+                errorPrintf("OLD_PWD not set\n");
                 return 3;
             } else {
                 errorCode = chdir(previousDirectory);
@@ -29,27 +29,27 @@ int changeDirectory(char* path) {
         } else {
             errorCode = chdir(pathCpy);
             if (errorCode == -1) {
-                fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", pathCpy);
+                errorPrintf("Could not warp to \'%s\'\n", pathCpy);
                 return EXEC_FAILURE;
             }           
         }
     } else {                    
         errorCode = chdir(path);
         if (errorCode == -1) {
-            fprintf(stderr, "[ERROR]: Could not warp to \'%s\'\n", path);
+            errorPrintf("Could not warp to \'%s\'\n", path);
             return EXEC_FAILURE;
         }
     }
 
     if (errorCode == -1) {
         if (errno == 2) {
-            fprintf(stderr, "[ERROR]: Directory \'%s\' not found\n", path);
+            errorPrintf("Directory \'%s\' not found\n", path);
             return NO_SUCH_DIRECTORY;
         }
     } else if (errno == 0) {
         strcpy(previousDirectory, absolutePath);
         if (getcwd(absolutePath, DIRECTORY_BUFFER_SIZE) == NULL) {
-            fprintf(stderr, "[ERROR]: Warp: Could not get current directory\n");
+            errorPrintf("Warp: Could not get current directory\n");
             return EXEC_FAILURE;
         } else {
             printf("%s\n", absolutePath);

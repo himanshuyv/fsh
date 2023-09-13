@@ -11,7 +11,7 @@ int proclore(pid_t pid) {
     sprintf(statFilePath, STAT_FILE_PATH_FORMAT, pid);
     FILE* statFile = fopen(statFilePath, "r");
     if (statFile == NULL) {
-        fprintf(stderr, "[ERROR]: Error opening %s\n", statFilePath);
+        errorPrintf("Error opening %s\n", statFilePath);
         return EXEC_FAILURE;
     }
     
@@ -32,7 +32,7 @@ int proclore(pid_t pid) {
     }
 
     if (status == '\0') {
-        fprintf(stderr, "[ERROR]: Unable to read %s\n", statFilePath);
+        errorPrintf("Unable to read %s\n", statFilePath);
         return EXEC_FAILURE;
     }
 

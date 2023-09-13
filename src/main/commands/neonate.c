@@ -6,7 +6,7 @@ int repeatInterval = 0;
 void printRecentPID(int sig) {
     FILE* loadAvg = fopen(LOAD_AVG_FILE, "r");
     if (loadAvg == NULL) {
-        fprintf(stderr, "[ERROR]: Could not open \'%s\'\n", LOAD_AVG_FILE);
+        errorPrintf("Could not open \'%s\'\n", LOAD_AVG_FILE);
     } else {
         char readBuffer[1024];
         for (int i = 0; i < 5; i++) fscanf(loadAvg, "%s", readBuffer);
@@ -27,19 +27,19 @@ int kbhit() {
 
 int neonate(Subcommand command) {
     if (command->argc != 3) {
-        fprintf(stderr, "[ERROR]: neonate expects 2 arguments, found %lu\n",
+        errorPrintf("neonate expects 2 arguments, found %lu\n",
                 command->argc - 1);
         return EXEC_FAILURE;
     }
 
     if (strcmp(command->argv[1], "-n") != 0) {
-        fprintf(stderr, "[ERROR]: Invalid argument for neonate \'%s\'\n",
+        errorPrintf("Invalid argument for neonate \'%s\'\n",
                 command->argv[1]);
         return EXEC_FAILURE;
     }
 
     if (!isNum(command->argv[2])) {
-        fprintf(stderr, "[ERROR]: Invalid argument for neonate \'%s\'\n",
+        errorPrintf("Invalid argument for neonate \'%s\'\n",
                 command->argv[2]);
         return EXEC_FAILURE;
     }
@@ -59,7 +59,7 @@ int neonate(Subcommand command) {
             } else {
                 FILE* loadAvg = fopen(LOAD_AVG_FILE, "r");
                 if (loadAvg == NULL) {
-                    fprintf(stderr, "[ERROR]: Could not open \'%s\'\n",
+                    errorPrintf("Could not open \'%s\'\n",
                             LOAD_AVG_FILE);
                 } else {
                     char readBuffer[1024];

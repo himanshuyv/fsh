@@ -5,7 +5,7 @@
 
 int activities(Subcommand command) {
     if (command->argc != 1) {
-        fprintf(stderr, "[ERROR]: Too many arguments for activites\n");
+        errorPrintf("Too many arguments for activites\n");
         return EXEC_FAILURE;
     }
 
@@ -15,7 +15,7 @@ int activities(Subcommand command) {
         sprintf(statFilePath, STAT_FILE_PATH_FORMAT, pid);
         FILE* statFile = fopen(statFilePath, "r");
         if (statFile == NULL) {
-            fprintf(stderr, "[ERROR]: Error opening %s\n", statFilePath);
+            errorPrintf("Error opening %s\n", statFilePath);
             return EXEC_FAILURE;
         }
 
@@ -29,7 +29,7 @@ int activities(Subcommand command) {
         }
 
         if (status == '\0') {
-            fprintf(stderr, "[ERROR]: Unable to read %s\n", statFilePath);
+            errorPrintf("Unable to read %s\n", statFilePath);
             return EXEC_FAILURE;
         }
 
