@@ -10,5 +10,5 @@ void initBackground();
 void destructBackground();
 void printFinishedProcesses();
 int addProcess(char* processName, pid_t processID);
-
+ProcessList sortProcessList(ProcessList list);
 #endif

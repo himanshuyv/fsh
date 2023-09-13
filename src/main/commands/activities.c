@@ -8,7 +8,7 @@ int activities(Subcommand command) {
         errorPrintf("Too many arguments for activites\n");
         return EXEC_FAILURE;
     }
-
+    backgroundList = sortProcessList(backgroundList);
     for (Process itr = backgroundList; itr != NULL; itr = itr->next) {
         pid_t pid = itr->processID;
         char statFilePath[DIRECTORY_BUFFER_SIZE];

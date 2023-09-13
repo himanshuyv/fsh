@@ -43,3 +43,47 @@ int addProcess(char* processName, pid_t processID) {
     addToList(&backgroundList, new);
     return 0;    
 }
+
+Process findMiddle(ProcessList list) {
+    Process slow = list, fast = list;
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+bool compareProcess(Process a, Process b) {
+    return a->processID < b->processID;
+}
+
+ProcessList mergeSorted(ProcessList list1, ProcessList list2) {
+    if (list1 == NULL) return list2;
+    if (list2 == NULL) return list1;
+
+    if (compareProcess(list1, list2)) {
+        Process ret = mergeSorted(list1->next, list2);
+        list1->next = ret;
+        ret->prev = list1;
+        return list1;
+    } else {
+        Process ret = mergeSorted(list1, list2->next);
+        list2->next = ret;
+        ret->prev = list2;
+        return list2;
+    }
+}
+
+ProcessList sortProcessList(ProcessList list) {
+    if (list == NULL) return NULL;
+    if (list->next == NULL) return list;
+    Process middle = findMiddle(list);
+    ProcessList list1 = list;
+    ProcessList list2 = middle;
+    if (middle->prev) middle->prev->next = NULL;
+    middle->prev = NULL;
+    list1 = sortProcessList(list1);
+    list2 = sortProcessList(list2);
+    return mergeSorted(list1, list2);
+}
