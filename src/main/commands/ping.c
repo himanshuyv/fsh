@@ -2,8 +2,8 @@
 
 int ping(Subcommand command) {  
     if (command->argc != 3) {
-        fprintf(stderr, "[ERROR]: Ping expects 2 arguments found %ld\n", command->argc);
-        return EXEC_FAILURE;
+        fprintf(stderr, "[ERROR]: Ping expects 2 arguments found %ld\n", command->argc - 1);
+        return EXEC_FAILURE;    
     } 
 
     if (!isNum(command->argv[1])) {
