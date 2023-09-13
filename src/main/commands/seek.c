@@ -134,6 +134,12 @@ int seek(Subcommand command) {
     char dirPath[DIRECTORY_BUFFER_SIZE];
     char target[DIRECTORY_BUFFER_SIZE];
     bool dirOnlyFlag = false, fileOnlyFlag = false, oneFlag = false;
+
+    if (command->argc == 1) {
+        errorPrintf("Too few arguments for seek\n");
+        return EXEC_FAILURE;
+    }
+
     if (setSeekFlags(command, target, dirPath, &dirOnlyFlag, &fileOnlyFlag, &oneFlag))
         return EXEC_FAILURE;
 

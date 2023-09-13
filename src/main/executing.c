@@ -96,6 +96,12 @@ int executeSeek(Subcommand command) {
     return exitCode;
 }
 
+void executeExit(Subcommand command) {
+    destructBackground();
+    destructHistory();
+    exit(0);
+}
+
 int executeSubcommand(Subcommand command) {
     if (command->argc == 0) {
         errorPrintf("Command has length 0\n");
@@ -127,6 +133,8 @@ int executeSubcommand(Subcommand command) {
         exitCode = neonate(command);
     else if (strcmp(commandName, "iman") == 0)
         exitCode = iman(command);
+    else if (strcmp(commandName, "exit") == 0)
+        executeExit(command);
     else
         exitCode = executeSys(command);
 
