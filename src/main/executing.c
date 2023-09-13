@@ -121,6 +121,10 @@ int executeSubcommand(Subcommand command) {
         exitCode = ping(command);
     else if (strcmp(commandName, "bg") == 0)
         exitCode = bg(command);
+    else if (strcmp(commandName, "fg") == 0)
+        exitCode = fg(command);
+    else if (strcmp(commandName, "activities") == 0)
+        exitCode = activities(command);
     else
         exitCode = executeSys(command);
 

@@ -28,7 +28,7 @@ void printFinishedProcesses() {
 #endif
 
         if (WIFEXITED(status)) {
-            printf("%s exited normally (killed) (%d)\n", itr->processName, itr->processID);
+            printf("%s exited normally (%d)\n", itr->processName, itr->processID);
             itr = removeFromList(&backgroundList, itr);
             backgroundListSize--;
         } else {

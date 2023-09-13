@@ -23,7 +23,9 @@
 #define MAX_COMMAND_PER_LINE 32
 #define RADIX 10
 
+#include "commands/activities.h"
 #include "commands/bg.h"
+#include "commands/fg.h"
 #include "commands/pastevents.h"
 #include "commands/peek.h"
 #include "commands/ping.h"

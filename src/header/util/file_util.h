@@ -3,6 +3,9 @@
 
 #include <sys/stat.h>
 
+extern const char* STAT_FILE_PATH_FORMAT;
+extern const char* EXE_FILE_PATH_FORMAT;
+
 void replaceHomeDirPrefix(char* path);
 bool isHomeDirPrefix(char* path);
 void replaceTildaWithHome(char* path);
