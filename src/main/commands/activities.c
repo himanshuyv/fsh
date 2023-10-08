@@ -11,13 +11,13 @@ int activities(Subcommand command) {
     backgroundList = sortProcessList(backgroundList);
     for (Process itr = backgroundList; itr != NULL; itr = itr->next) {
         pid_t pid = itr->processID;
-        
         char statFilePath[DIRECTORY_BUFFER_SIZE];
         sprintf(statFilePath, STAT_FILE_PATH_FORMAT, pid);
         FILE* statFile = fopen(statFilePath, "r");
         if (statFile == NULL) {
-            errorPrintf("Error opening %s\n", statFilePath);
-            return EXEC_FAILURE;
+            // errorPrintf("Error opening %s\n", statFilePath);
+            // return EXEC_FAILURE;
+            continue;
         }
 
         char readBuffer[1024];
